@@ -1,0 +1,24 @@
+doctype html
+html(class="no-js", lang="")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="x-ua-compatible", content="ie=edge")
+    title= title
+    meta(name="description", description=description)
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel="apple-touch-icon", href="apple-touch-icon.png")
+    style#css!= css
+  body
+link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css")
+
+link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css")
+//- script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.30.1/react.min.js")
+//- script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.30.1/react-dom.min.js")
+script(src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.1/react-bootstrap.min.js")
+    #app!= body
+    script(src=entry)
+    script.
+      window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+      ga('create','#{trackingId}','auto');ga('send','pageview')
+    if trackingId
+      script(src="https://www.google-analytics.com/analytics.js", async=true, defer=true)
