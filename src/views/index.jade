@@ -9,13 +9,7 @@ html(class="no-js", lang="")
     link(rel="apple-touch-icon", href="apple-touch-icon.png")
     style#css!= css
   body
-link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css")
-
-link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css")
-//- script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.30.1/react.min.js")
-//- script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.30.1/react-dom.min.js")
-script(src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.1/react-bootstrap.min.js")
-    #app!= body
+    #MuiThemeProvider!= body
     script(src=entry)
     script.
       window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;

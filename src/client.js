@@ -9,13 +9,14 @@
 
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FastClick from 'fastclick';
 import Router from './routes';
 import Location from './core/Location';
 import { addEventListener, removeEventListener } from './core/DOMUtils';
 
 let cssContainer = document.getElementById('css');
-const appContainer = document.getElementById('app');
+const appContainer = document.getElementById('MuiThemeProvider');
 const context = {
   insertCss: styles => styles._insertCss(),
   onSetTitle: value => (document.title = value),
