@@ -13,6 +13,8 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
 import { MuiThemeProvider } from 'material-ui/styles';
+import Bucket from './Bucket.js';
+import AddBucket from './AddBucket.js'
 
 import s from './Buckets.scss';
 
@@ -84,8 +86,16 @@ const d = [
 class Buckets extends React.Component {
     constructor(props){
         super(props);
-    }
+        this.state = {showAddBucket: false}
 
+        this.toggleShowAddBucket= this.toggleShowAddBucket.bind(this)
+    }
+    toggleShowAddBucket(){
+      this.setState(prevState => ({
+        showAddBucket: !prevState.showAddBucket
+      })
+      );
+    }
     render() {
         return (
             <MuiThemeProvider>
@@ -94,37 +104,14 @@ class Buckets extends React.Component {
                     <Grid item className={s.container}>
                         <h1>Jessica</h1>
                     </Grid>
+                    <Button label="Default" raised={true} style={buttonStyle} onClick={this.toggleShowAddBucket}>Add Bucket</Button>
+                    { this.state.showAddBucket ? <AddBucket /> : null }
                     {
                         d.map(function(bucket){
-                            return <div>
-                                <Grid item lg={6} md={6} xs={12} key={bucket._id} title={bucket.friendlyName}>
-                                    <Paper style={paperStyle} zDepth={5}>
-                                    <h1>{bucket.friendlyName}</h1>
-                                    <Grid container styles={styles.root}>
-                                {
-                                    bucket.transactions.map(function(trans){
-                                        return <div key={trans._id}>
-                                        <Grid item lg={4} md={4} xs={12}>
-                                            <Paper style={paperStyle}>
-                                                <div>label: {trans.label}</div>
-                                                <div>vendor: {trans.vendor}</div>
-                                                <div>type: {trans.transactionType}</div>
-                                                <div>amount: {trans.amount}</div>
-                                                <div>date: {trans.date}</div>
-                                            </Paper>
-                                        </Grid>
-                                        <div>&nbsp;</div>
-                                        </div>
-                                    })
-                                }
-                                    </Grid>
-                                    </Paper>
-                                </Grid>
-                            </div>
-                        })
+                            return <Bucket b={bucket} />
+                            })
                     }
                     </Paper>
-                    <Button label="Default" raised={true} style={buttonStyle} >Add Bucket</Button>
                 </Grid>
             </MuiThemeProvider>
         );
