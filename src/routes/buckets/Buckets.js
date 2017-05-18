@@ -94,7 +94,6 @@ class Buckets extends React.Component {
                     <Grid item className={s.container}>
                         <h1>Jessica</h1>
                     </Grid>
-                    <Button label="Default" raised={true} style={buttonStyle} >Text here</Button>
                     {
                         d.map(function(bucket){
                             return <div>
@@ -105,12 +104,14 @@ class Buckets extends React.Component {
                                 {
                                     bucket.transactions.map(function(trans){
                                         return <div key={trans._id}>
-                                        <Grid style={paperStyle} item lg={4} md={4} xs={12}>
-                                        <div>label: {trans.label}</div>
-                                        <div>vendor: {trans.vendor}</div>
-                                        <div>type: {trans.transactionType}</div>
-                                        <div>amount: {trans.amount}</div>
-                                        <div>date: {trans.date}</div>
+                                        <Grid item lg={4} md={4} xs={12}>
+                                            <Paper style={paperStyle}>
+                                                <div>label: {trans.label}</div>
+                                                <div>vendor: {trans.vendor}</div>
+                                                <div>type: {trans.transactionType}</div>
+                                                <div>amount: {trans.amount}</div>
+                                                <div>date: {trans.date}</div>
+                                            </Paper>
                                         </Grid>
                                         <div>&nbsp;</div>
                                         </div>
@@ -123,6 +124,7 @@ class Buckets extends React.Component {
                         })
                     }
                     </Paper>
+                    <Button label="Default" raised={true} style={buttonStyle} >Add Bucket</Button>
                 </Grid>
             </MuiThemeProvider>
         );
