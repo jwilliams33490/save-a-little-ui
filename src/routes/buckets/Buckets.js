@@ -8,9 +8,41 @@
  */
 
 import React, { PropTypes } from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import Grid from 'material-ui/Grid';
+import Paper from 'material-ui/Paper';
+import Button from 'material-ui/Button';
+import { withTheme, createStyleSheet} from 'material-ui/styles';
+import { MuiThemeProvider } from 'material-ui/styles';
+
 import s from './Buckets.scss';
+
+const styles = {
+  root: { 
+    display: 'flex',
+    flexWrap: 'wrap',
+   justifyContent: 'space-around',
+  },
+  gridList: {
+    width: 500,
+    height: 450,
+    overflowY: 'auto',
+  },
+};
+
+
+const buttonStyle = {
+  margin: 12,
+};
+
+const paperStyle = { 
+
+//   height: 100,
+//   width: 100,
+  margin: 20,
+  // textAlign: 'center',
+  display: 'inline-block',
+};
+
 const d = [
   {
     "_id": "58f67e44282419e32cd33030",
@@ -47,44 +79,55 @@ const d = [
   }
 ]
 
+
+
 class Buckets extends React.Component {
     constructor(props){
         super(props);
-
-
     }
-    render(){
-         return (
-            <div className={s.root}>
-            <div className={s.container}>
-                <h1>Jessica</h1>
-                {
-                    d.map(function(bucket){
-                        return <Grid>
-                            <Row>name: {bucket.friendlyName}</Row>
-                            <Row>
-                            {
-                                bucket.transactions.map(function(trans){
-                                    return <Col md={6}>
-                                    <div>label: {trans.label}</div>
-                                    <div>vendor: {trans.vendor}</div>
-                                    <div>type: {trans.transactionType}</div>
-                                    <div>amount: {trans.amount}</div>
-                                    <div>date: {trans.date}</div>
-                                    </Col>
-                                })
-                            }
-                            </Row>
-                        </Grid>
-                    })
-                }
-            </div>
-            </div>
+
+    render() {
+        return (
+            <MuiThemeProvider>
+                <Grid container lg={12} md={12} xs={12} styles={styles.root}>
+                    <Paper style={paperStyle} zDepth={4}>
+                    <Grid item className={s.container}>
+                        <h1>Jessica</h1>
+                    </Grid>
+                    <Button label="Default" raised={true} style={buttonStyle} >Text here</Button>
+                    {
+                        d.map(function(bucket){
+                            return <div>
+                                <Grid item lg={6} md={6} xs={12} key={bucket._id} title={bucket.friendlyName}>
+                                    <Paper style={paperStyle} zDepth={5}>
+                                    <h1>{bucket.friendlyName}</h1>
+                                    <Grid container styles={styles.root}>
+                                {
+                                    bucket.transactions.map(function(trans){
+                                        return <div key={trans._id}>
+                                        <Grid style={paperStyle} item lg={4} md={4} xs={12}>
+                                        <div>label: {trans.label}</div>
+                                        <div>vendor: {trans.vendor}</div>
+                                        <div>type: {trans.transactionType}</div>
+                                        <div>amount: {trans.amount}</div>
+                                        <div>date: {trans.date}</div>
+                                        </Grid>
+                                        <div>&nbsp;</div>
+                                        </div>
+                                    })
+                                }
+                                    </Grid>
+                                    </Paper>
+                                </Grid>
+                            </div>
+                        })
+                    }
+                    </Paper>
+                </Grid>
+            </MuiThemeProvider>
         );
-    }
- 
+    } 
 }
 
-Buckets.propTypes = { title: PropTypes.string.isRequired };
 
-export default withStyles(Buckets, s);
+export default withTheme(Buckets, s);

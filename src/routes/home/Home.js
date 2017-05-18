@@ -14,12 +14,6 @@ import s from './Home.scss';
 function Home({ news }) {
   return (
     <div className={s.root}>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"></link>
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css"></link>
-{/*<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.30.1/react.min.js"></script>*/}
-{/*<script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.30.1/react-dom.min.js"></script>*/}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.30.1/react-bootstrap.min.js"></script>
       <div className={s.container}>
         <h1 className={s.title}>React.js News</h1>
         <ul className={s.news}>
