@@ -4,6 +4,8 @@ import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js'
+import TextField from 'material-ui/TextField';
+import {render, findDOMNode} from 'react-dom';
 
 import s from './Buckets.scss';
 
@@ -35,12 +37,57 @@ const paperStyle = {
 
 class AddBucket extends React.Component{
     constructor(props){
-        super()
+        super(props)
+        this.state = {name:'', color:'', filter:''};
+
+        this.okClick = this.okClick.bind(this);
+        this.cancelClick = this.cancelClick.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleColorChange = this.handleColorChange.bind(this);
+        this.handleFilterChange = this.handleFilterChange.bind(this);
+    }
+    okClick() {
+        console.log(this.state.name)
+    }
+    cancelClick() {
+        console.log(this.state.color) 
+        this.props.onCancelBucket();
+    }
+    handleNameChange(event) {
+        console.log("Hi");
+        this.setState({name: event.target.value});
+    }
+    handleColorChange(event) {
+        this.setState({color: event.target.value});
+    }
+    handleFilterChange(event) {
+        this.setState({filter: event.target.value});
     }
     render(){
-        return <div>Create Add Bucket Here 
-        <Button label="Default" raised={true} style={buttonStyle} >OK</Button>
-        <Button label="Default" raised={true} style={buttonStyle} >Cancel</Button>
+        return <div> 
+        <TextField
+            value={this.state.name}
+            onChange={this.handleNameChange}
+            hintText="Groceries"
+            label="Bucket Name"
+            floatingLabelFixed={true}
+        /><br/>
+        <TextField
+            value={this.state.color}
+            onChange={this.handleColorChange}
+            hintText="Blue"
+            label="Color"
+            floatingLabelFixed={true}
+        /><br/>
+        <TextField
+            value={this.state.filter}
+            onChange={this.handleFilterChange}
+            hintText="Type = Liquor"
+            label="Filter"
+            floatingLabelFixed={true}
+        /><br/>
+        <Button label="Default" raised={true} style={buttonStyle} onClick={this.okClick} >OK</Button>
+        <Button label="Default" raised={true} style={buttonStyle} onClick={this.cancelClick} >Cancel</Button>
         </div>
     }
 }
