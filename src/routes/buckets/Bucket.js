@@ -37,11 +37,45 @@ const paperStyle = {
 class Bucket extends React.Component{
     constructor(props){
         super(props)
-        this.state={showAddTransaction:false}
+        this.state={showAddTransaction:false, transactions:props.b.transactions}
+        this.showAddTransaction = this.showAddTransaction.bind(this);
+        this.addTransaction = this.addTransaction.bind(this);
+        this.cancelTransaction = this.cancelTransaction.bind(this);
     }
     showAddTransaction(){
         this.setState({showAddTransaction:true})
     }
+    addTransaction(data){
+        console.log("adding transaction" + JSON.stringify(data));
+        let local = this;
+        fetch('http://localhost:3030/transaction/' + this.props.b._id, { method: 'POST', headers: {'Content-Type': 'application/json'},
+         body: JSON.stringify(data)})
+        .then(function(res) {
+            fetch('http://localhost:3030/transaction/' + local.props.b._id)
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log("here are the transactions" + JSON.stringify(json));
+                  local.setState({
+                    transactions:json
+                  })
+                  console.log(JSON.stringify(local.state));
+              });
+        }).catch(function(err) {
+        console.log(err);
+    });
+        this.setState({showAddTransaction:false});
+    }
+
+    cancelTransaction() {
+        this.setState({showAddTransaction:false});
+    }
+
     render(){
         return <div>
             <Grid item lg={6} md={6} xs={12} key={this.props.b._id} title={this.props.b.friendlyName}>
@@ -51,14 +85,14 @@ class Bucket extends React.Component{
                 <Button label="Default" raised={true} style={buttonStyle} >Delete Bucket</Button>
                 <Grid container styles={styles.root}>
             {
-                this.props.b.transactions.map(function(trans){
+                this.state.transactions.map(function(trans){
                     return <Transaction t={trans}/>;
                 })
             }
                 </Grid>
                 <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddTransaction} >Add Transaction</Button>
-                {this.showAddTransaction ? 
-                    <AddTransaction/>
+                {this.state.showAddTransaction ? 
+                    <AddTransaction onAddTransaction= {this.addTransaction} onCancelTransaction= {this.cancelTransaction}/>
                     : null
                 }
                 </Paper>

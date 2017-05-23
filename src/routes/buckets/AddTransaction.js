@@ -40,7 +40,7 @@ class AddTransaction extends React.Component{
     constructor(props){
         super(props)
         var dt = new Date().toLocaleTimeString()
-        this.state = {date: dt,
+        this.state = {//date: dt,
         amount: 0.0,
         transactionType: '',
         vendor: '',
@@ -48,12 +48,8 @@ class AddTransaction extends React.Component{
 
         this.okClick = this.okClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
-
         this.handleInputChange = this.handleInputChange.bind(this);
 
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleColorChange = this.handleColorChange.bind(this);
-        this.handleFilterChange = this.handleFilterChange.bind(this);
     }
     okClick() {
         console.log(this.state.amount)
@@ -64,21 +60,8 @@ class AddTransaction extends React.Component{
         this.props.onCancelTransaction();
     }
     handleInputChange(event) {
-
+        this.setState({[event.target.name]:event.target.value})
     }
-
-
-    handleNameChange(event) {
-        console.log("Hi");
-        this.setState({name: event.target.value});
-    }
-    handleColorChange(event) {
-        this.setState({color: event.target.value});
-    }
-    handleFilterChange(event) {
-        this.setState({filter: event.target.value});
-    }
-
 
     render(){
         return <div> 
