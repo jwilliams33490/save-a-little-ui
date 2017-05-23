@@ -3,7 +3,8 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
-import Transaction from './Transaction.js'
+import Transaction from './Transaction.js';
+import AddTransaction from './AddTransaction.js';
 
 import s from './Buckets.scss';
 
@@ -36,6 +37,10 @@ const paperStyle = {
 class Bucket extends React.Component{
     constructor(props){
         super(props)
+        this.state={showAddTransaction:false}
+    }
+    showAddTransaction(){
+        this.setState({showAddTransaction:true})
     }
     render(){
         return <div>
@@ -51,7 +56,11 @@ class Bucket extends React.Component{
                 })
             }
                 </Grid>
-                <Button label="Default" raised={true} style={buttonStyle} >Add Transaction</Button>
+                <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddTransaction} >Add Transaction</Button>
+                {this.showAddTransaction ? 
+                    <AddTransaction/>
+                    : null
+                }
                 </Paper>
             </Grid>
         </div>

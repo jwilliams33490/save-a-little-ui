@@ -88,7 +88,49 @@ class Buckets extends React.Component {
     constructor(props){
         super(props);
         this.state = {showAddBucket: false,buckets:[]}
-        var local = this;
+        
+
+        this.showAddBucket= this.showAddBucket.bind(this);
+        this.onAddBucket= this.onAddBucket.bind(this);
+        this.onCancelBucket= this.onCancelBucket.bind(this);
+    }
+    showAddBucket(){
+       this.setState({showAddBucket: true});
+    }
+
+    onAddBucket(data){
+      console.log('about to add bucket ' + JSON.stringify(data));
+      const postData = {friendlyName: data.name, friendlyColor: data.color, filter: data.filter, transactions: []}
+      let local = this;
+      fetch('http://localhost:3030/admin', { method: 'POST', headers: {'Content-Type': 'application/json'},
+         body: JSON.stringify(postData)})
+        .then(function(res) {
+            fetch('http://localhost:3030/admin')
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log(JSON.stringify(json));
+                  local.setState({
+                    buckets:json
+                  })          
+              });
+        }).catch(function(err) {
+        console.log(err);
+    });
+
+
+       this.setState({showAddBucket: false});
+    }
+    onCancelBucket(){
+      this.setState({showAddBucket: false});
+    }
+    componentDidMount(){
+      var local = this;
         fetch('http://localhost:3030/admin')
           .then(function(res) {
               return res.json();
@@ -98,23 +140,6 @@ class Buckets extends React.Component {
                 buckets:json
               })          
           });
-
-        this.toggleShowAddBucket= this.toggleShowAddBucket.bind(this);
-        this.onAddBucket= this.onAddBucket.bind(this);
-        this.onCancelBucket= this.onCancelBucket.bind(this);
-    }
-    toggleShowAddBucket(){
-      this.setState(prevState => ({
-        showAddBucket: !prevState.showAddBucket
-      }));
-
-    }
-
-    onAddBucket(){
-
-    }
-    onCancelBucket(){
-      this.setState({showAddBucket: false});
     }
 
     render() {
@@ -125,18 +150,11 @@ class Buckets extends React.Component {
                     <Grid item className={s.container}>
                         <h1>Jessica</h1>
                     </Grid>
-                    <Button label="Default" raised={true} style={buttonStyle} onClick={this.toggleShowAddBucket}>Add Bucket</Button>
+                    <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddBucket}>Add Bucket</Button>
                     { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
-                    {
-                        this.state.buckets ? (
-                          this.state.buckets.map(function(bucket){
-                            return <Bucket b={bucket} />
-                            })
-                        ) : (
-                           null
-                          )
-                        
-                    }
+                    { this.state.buckets.map(function(bucket){
+                        return <Bucket b={bucket} />
+                    })};
                     </Paper>
                 </Grid>
             </MuiThemeProvider>

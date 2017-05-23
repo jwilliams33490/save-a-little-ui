@@ -48,6 +48,7 @@ class AddBucket extends React.Component{
     }
     okClick() {
         console.log(this.state.name)
+        this.props.onAddBucket(this.state);
     }
     cancelClick() {
         console.log(this.state.color) 
