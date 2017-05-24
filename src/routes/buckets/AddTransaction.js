@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
-import Grid from 'material-ui/Grid';
+// import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
+import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js'
 import TextField from 'material-ui/TextField';
 import {render, findDOMNode} from 'react-dom';
 //import DatePicker from 'material-ui/DatePicker';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import s from './Buckets.scss';
 
@@ -116,10 +117,10 @@ class AddTransaction extends React.Component{
                 label="Date"
                 name="date"
             /><br/>*/}
-            <Button label="Default" raised={true} style={buttonStyle} onClick={this.okClick} >OK</Button>
-            <Button label="Default" raised={true} style={buttonStyle} onClick={this.cancelClick} >Cancel</Button>
+            <RaisedButton style={buttonStyle} onClick={this.okClick} >OK</RaisedButton>
+            <RaisedButton style={buttonStyle} onClick={this.cancelClick} >Cancel</RaisedButton>
         </div>
     }
 }
 
-export default withTheme(AddTransaction, s);
+export default withStyles(AddTransaction, s);

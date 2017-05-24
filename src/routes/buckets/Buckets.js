@@ -8,14 +8,17 @@
  */
 
 import React, { PropTypes } from 'react';
-import Grid from 'material-ui/Grid';
+// import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
+import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
-import { MuiThemeProvider } from 'material-ui/styles';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Bucket from './Bucket.js';
 import AddBucket from './AddBucket.js';
 import fetch from 'node-fetch';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import s from './Buckets.scss';
 
@@ -144,23 +147,26 @@ class Buckets extends React.Component {
 
     render() {
         return (
-            <MuiThemeProvider>
-                <Grid container styles={styles.root}>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <div >
                     <Paper style={paperStyle} zDepth={4}>
-                    <Grid item className={s.container}>
+                    <div className={s.container}>
                         <h1>Jessica</h1>
-                    </Grid>
-                    <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddBucket}>Add Bucket</Button>
+                    </div>
+                    <RaisedButton style={buttonStyle} onClick={this.showAddBucket}>Add Bucket</RaisedButton>
                     { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
                     { this.state.buckets.map(function(bucket){
-                        return <Bucket b={bucket} />
+                        return (<div key={bucket._id}><Bucket b={bucket} /></div>)
                     })};
                     </Paper>
-                </Grid>
+                </div>
             </MuiThemeProvider>
         );
     } 
 }
+                    // { this.state.buckets.map(function(bucket){
+                    //     return (<div><h1>bucket._id</h1><h1>{bucket._id}</h1></div>)
+                    // })};
 
 
-export default withTheme(Buckets, s);
+export default withStyles(Buckets, s);
