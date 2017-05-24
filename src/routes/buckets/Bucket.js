@@ -38,11 +38,45 @@ const paperStyle = {
 class Bucket extends React.Component{
     constructor(props){
         super(props)
-        this.state={showAddTransaction:false}
+        this.state={showAddTransaction:false, transactions:props.b.transactions}
+        this.showAddTransaction = this.showAddTransaction.bind(this);
+        this.addTransaction = this.addTransaction.bind(this);
+        this.cancelTransaction = this.cancelTransaction.bind(this);
     }
     showAddTransaction(){
         this.setState({showAddTransaction:true})
     }
+    addTransaction(data){
+        console.log("adding transaction" + JSON.stringify(data));
+        let local = this;
+        fetch('http://localhost:3030/transaction/' + this.props.b._id, { method: 'POST', headers: {'Content-Type': 'application/json'},
+         body: JSON.stringify(data)})
+        .then(function(res) {
+            fetch('http://localhost:3030/transaction/' + local.props.b._id)
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log("here are the transactions" + JSON.stringify(json));
+                  local.setState({
+                    transactions:json
+                  })
+                  console.log(JSON.stringify(local.state));
+              });
+        }).catch(function(err) {
+        console.log(err);
+    });
+        this.setState({showAddTransaction:false});
+    }
+
+    cancelTransaction() {
+        this.setState({showAddTransaction:false});
+    }
+
     render(){
         return <div >
                 <Paper style={paperStyle} zDepth={5}>
@@ -51,14 +85,14 @@ class Bucket extends React.Component{
                 <RaisedButton label="Default" style={buttonStyle} >Delete Bucket</RaisedButton>
                 <div >
                 {
-                    this.props.b.transactions.map(function(trans){
+                  this.state.transactions.map(function(trans){
                         return <div key={trans._id}><Transaction t={trans}/></div>;
                     })
                 }
                 </div>
                 <RaisedButton style={buttonStyle} onClick={this.showAddTransaction} >Add Transaction</RaisedButton>
                 {this.showAddTransaction ? 
-                    <AddTransaction/>
+                    <AddTransaction onAddTransaction= {this.addTransaction} onCancelTransaction= {this.cancelTransaction}/>
                     : null
                 }
                 </Paper>
