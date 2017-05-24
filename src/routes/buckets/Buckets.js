@@ -88,11 +88,10 @@ class Buckets extends React.Component {
     constructor(props){
         super(props);
         this.state = {showAddBucket: false,buckets:[]}
-        
-
         this.showAddBucket= this.showAddBucket.bind(this);
         this.onAddBucket= this.onAddBucket.bind(this);
         this.onCancelBucket= this.onCancelBucket.bind(this);
+        this.onDeleteBucket = this.onDeleteBucket.bind(this);
     }
     showAddBucket(){
        this.setState({showAddBucket: true});
@@ -138,8 +137,12 @@ class Buckets extends React.Component {
               console.log(json);
               local.setState({
                 buckets:json
-              })          
+              });          
           });
+    }
+
+    onDeleteBucket(id){
+      console.log("ready to delete" + id);
     }
 
     render() {
@@ -153,14 +156,12 @@ class Buckets extends React.Component {
                     <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddBucket}>Add Bucket</Button>
                     { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
                     { this.state.buckets.map(function(bucket){
-                        return <Bucket b={bucket} />
-                    })};
+                        return <Bucket b={bucket} deleteBucket={this.onDeleteBucket} />
+                    }, this)};
                     </Paper>
                 </Grid>
             </MuiThemeProvider>
         );
     } 
 }
-
-
 export default withTheme(Buckets, s);

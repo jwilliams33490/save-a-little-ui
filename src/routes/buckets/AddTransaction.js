@@ -3,10 +3,9 @@ import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
-import Transaction from './Transaction.js'
+import Transaction from './Transaction.js';
 import TextField from 'material-ui/TextField';
 import {render, findDOMNode} from 'react-dom';
-//import DatePicker from 'material-ui/DatePicker';
 
 import s from './Buckets.scss';
 
@@ -15,10 +14,10 @@ const buttonStyle = {
 };
 
 const styles = {
-  root: { 
+  root:{
     display: 'flex',
     flexWrap: 'wrap',
-   justifyContent: 'space-around',
+    justifyContent: 'space-around',
   },
   gridList: {
     width: 500,
@@ -27,8 +26,7 @@ const styles = {
   },
 };
 
-const paperStyle = { 
-
+const paperStyle = {
 //   height: 100,
 //   width: 100,
   margin: 20,
@@ -37,7 +35,7 @@ const paperStyle = {
 };
 
 class AddTransaction extends React.Component{
-    constructor(props){
+    constructor(props) {
         super(props)
         var dt = new Date().toLocaleTimeString()
         this.state = {//date: dt,

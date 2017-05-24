@@ -6,6 +6,7 @@ import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js';
 import AddTransaction from './AddTransaction.js';
 
+
 import s from './Buckets.scss';
 
 const buttonStyle = {
@@ -41,6 +42,7 @@ class Bucket extends React.Component{
         this.showAddTransaction = this.showAddTransaction.bind(this);
         this.addTransaction = this.addTransaction.bind(this);
         this.cancelTransaction = this.cancelTransaction.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
     showAddTransaction(){
         this.setState({showAddTransaction:true})
@@ -76,13 +78,18 @@ class Bucket extends React.Component{
         this.setState({showAddTransaction:false});
     }
 
+    onDelete (){
+        console.log("starting delete");
+        this.props.deleteBucket(this.props.b._id);
+    }
+
     render(){
         return <div>
             <Grid item lg={6} md={6} xs={12} key={this.props.b._id} title={this.props.b.friendlyName}>
                 <Paper style={paperStyle} zDepth={5}>
                 <h1>{this.props.b.friendlyName}</h1>
                 <Button label="Default" raised={true} style={buttonStyle} >Edit Bucket</Button>
-                <Button label="Default" raised={true} style={buttonStyle} >Delete Bucket</Button>
+                <Button label="Default" raised={true} style={buttonStyle} onClick={this.onDelete}>Delete Bucket</Button>
                 <Grid container styles={styles.root}>
             {
                 this.state.transactions.map(function(trans){
