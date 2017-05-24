@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
-import Grid from 'material-ui/Grid';
+// import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
+import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js'
 import TextField from 'material-ui/TextField';
 import {render, findDOMNode} from 'react-dom';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import s from './Buckets.scss';
 
@@ -66,31 +67,31 @@ class AddBucket extends React.Component{
     }
     render(){
         return <div> 
-        <TextField
-            value={this.state.name}
-            onChange={this.handleNameChange}
-            hintText="Groceries"
-            label="Bucket Name"
-            floatingLabelFixed={true}
-        /><br/>
-        <TextField
-            value={this.state.color}
-            onChange={this.handleColorChange}
-            hintText="Blue"
-            label="Color"
-            floatingLabelFixed={true}
-        /><br/>
-        <TextField
-            value={this.state.filter}
-            onChange={this.handleFilterChange}
-            hintText="Type = Liquor"
-            label="Filter"
-            floatingLabelFixed={true}
-        /><br/>
-        <Button label="Default" raised={true} style={buttonStyle} onClick={this.okClick} >OK</Button>
-        <Button label="Default" raised={true} style={buttonStyle} onClick={this.cancelClick} >Cancel</Button>
+            <TextField
+                value={this.state.name}
+                onChange={this.handleNameChange}
+                hintText="Groceries"
+                label="Bucket Name"
+                floatingLabelFixed={true}
+            /><br/>
+            <TextField
+                value={this.state.color}
+                onChange={this.handleColorChange}
+                hintText="Blue"
+                label="Color"
+                floatingLabelFixed={true}
+            /><br/>
+            <TextField
+                value={this.state.filter}
+                onChange={this.handleFilterChange}
+                hintText="Type = Liquor"
+                label="Filter"
+                floatingLabelFixed={true}
+            /><br/>
+            <RaisedButton label="Default" style={buttonStyle} onClick={this.okClick} >OK</RaisedButton>
+            <RaisedButton label="Default" style={buttonStyle} onClick={this.cancelClick} >Cancel</RaisedButton>
         </div>
     }
 }
 
-export default withTheme(AddBucket, s);
+export default withStyles(AddBucket, s);

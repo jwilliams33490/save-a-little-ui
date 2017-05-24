@@ -41,7 +41,6 @@ const config = {
   },
 
   cache: DEBUG,
-  debug: DEBUG,
 
   stats: {
     colors: true,
@@ -56,11 +55,23 @@ const config = {
   },
 
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: function plugins(bundler) {
+          return [
+            require('postcss-import')({ addDependencyTo: bundler }),
+            require('precss')(),
+            require('autoprefixer')({ browsers: AUTOPREFIXER_BROWSERS }),
+          ];
+        },
+        debug: DEBUG
+      }
+    })
   ],
 
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.json'],
+    extensions: ['.webpack.js', '.web.js', '.js', '.jsx', '.json'],
   },
 
   module: {
@@ -80,6 +91,9 @@ const config = {
           `${DEBUG ? '[name]_[local]_[hash:base64:3]' : '[hash:base64:4]'}`,
           'postcss-loader?parser=postcss-scss',
         ],
+      }, { 
+        test: /\.css$/, 
+        loader: "style-loader!css-loader" 
       }, {
         test: /\.json$/,
         loader: 'json-loader',
@@ -87,24 +101,36 @@ const config = {
         test: /\.txt$/,
         loader: 'raw-loader',
       }, {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
-        loader: 'url-loader?limit=10000',
-      }, {
         test: /\.(eot|ttf|wav|mp3)$/,
         loader: 'file-loader',
       }, {
         test: /\.jade$/,
         loader: 'jade-loader',
       },
-    ],
-  },
-
-  postcss: function plugins(bundler) {
-    return [
-      require('postcss-import')({ addDependencyTo: bundler }),
-      require('precss')(),
-      require('autoprefixer')({ browsers: AUTOPREFIXER_BROWSERS }),
-    ];
+      { 
+        test: /\.png$/, 
+        loader: "url-loader?limit=100000" 
+      },
+      { 
+        test: /\.(jpg|jpeg|gif)$/, 
+        loader: "file-loader" 
+      },
+      {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, 
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+      },
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, 
+        loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+      },
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
+        loader: 'file-loader'
+      },
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, 
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+      }    ],
   },
 };
 
@@ -153,7 +179,7 @@ const clientConfig = extend(true, {}, config, {
 const serverConfig = extend(true, {}, config, {
   entry: './src/server.js',
   output: {
-    path: './build',
+    path: path.join(__dirname, '../build'),
     filename: 'server.js',
     libraryTarget: 'commonjs2',
   },
@@ -180,8 +206,8 @@ const serverConfig = extend(true, {}, config, {
   plugins: [
     ...config.plugins,
     new webpack.DefinePlugin({ ...GLOBALS, 'process.env.BROWSER': false }),
-    new webpack.BannerPlugin('require("source-map-support").install();',
-      { raw: true, entryOnly: false }),
+    new webpack.BannerPlugin({banner: 'require("source-map-support").install();',
+      raw: true, entryOnly: false }),
   ],
 });
 
