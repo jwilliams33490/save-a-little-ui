@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react';
-import Grid from 'material-ui/Grid';
+// import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
+import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js';
 import AddTransaction from './AddTransaction.js';
-
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import AppBar from 'material-ui/AppBar';
+import FlatButton from 'material-ui/FlatButton';
 
 import s from './Buckets.scss';
 
@@ -85,27 +87,30 @@ class Bucket extends React.Component{
 
     render(){
         return <div>
-            <Grid item lg={6} md={6} xs={12} key={this.props.b._id} title={this.props.b.friendlyName}>
                 <Paper style={paperStyle} zDepth={5}>
-                <h1>{this.props.b.friendlyName}</h1>
-                <Button label="Default" raised={true} style={buttonStyle} >Edit Bucket</Button>
-                <Button label="Default" raised={true} style={buttonStyle} onClick={this.onDelete}>Delete Bucket</Button>
-                <Grid container styles={styles.root}>
-            {
-                this.state.transactions.map(function(trans){
-                    return <Transaction t={trans}/>;
-                })
-            }
-                </Grid>
-                <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddTransaction} >Add Transaction</Button>
-                {this.state.showAddTransaction ? 
+                <AppBar
+                showMenuIconButton={false}
+                title={<span style={styles.title}>{this.props.b.friendlyName}</span>}
+                iconElementRight={<span>
+                <FlatButton label="Edit Bucket" />
+                <FlatButton label="Delete Bucket" onClick={this.onDelete}/>
+                </span>}
+                />
+                <div >
+                {
+                  this.state.transactions.map(function(trans){
+                        return <div key={trans._id}><Transaction t={trans}/></div>;
+                    })
+                }
+                </div>
+                <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
+                {this.showAddTransaction ?
                     <AddTransaction onAddTransaction= {this.addTransaction} onCancelTransaction= {this.cancelTransaction}/>
                     : null
                 }
                 </Paper>
-            </Grid>
-        </div>
+            </div>
     }
 };
 
-export default withTheme(Bucket, s);
+export default withStyles(Bucket, s);

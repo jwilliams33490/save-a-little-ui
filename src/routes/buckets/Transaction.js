@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
-import Grid from 'material-ui/Grid';
+// import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
+import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import s from './Buckets.scss';
 
@@ -24,21 +25,19 @@ class Transaction extends React.Component {
         super(props);
     }
     render(){
-        return (<div key={this.props.t._id}>
-                <Grid item lg={4} md={4} xs={12}>
+        return (
+                <div>
                     <Paper style={paperStyle}>
-                        <Button label="Default" raised={true} style={buttonStyle} >Edit Transaction</Button>
-                        <Button label="Default" raised={true} style={buttonStyle} >Delete Transaction</Button>
+                        <RaisedButton label="Edit Transaction" style={buttonStyle} />
+                        <RaisedButton label="Delete Transaction" style={buttonStyle} />
                         <div>label: {this.props.t.label}</div>
                         <div>vendor: {this.props.t.vendor}</div>
                         <div>type: {this.props.t.transactionType}</div>
                         <div>amount: {this.props.t.amount}</div>
                         <div>date: {this.props.t.date}</div>
                     </Paper>
-                </Grid>
-            <div>&nbsp;</div>
-            </div>);
+                </div>);
     }
 };
 
-export default withTheme(Transaction, s);
+export default withStyles(Transaction, s);

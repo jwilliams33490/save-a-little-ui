@@ -8,14 +8,19 @@
  */
 
 import React, { PropTypes } from 'react';
-import Grid from 'material-ui/Grid';
+// import Grid from 'material-ui/Grid';
 import Paper from 'material-ui/Paper';
-import Button from 'material-ui/Button';
+import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
-import { MuiThemeProvider } from 'material-ui/styles';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Bucket from './Bucket.js';
 import AddBucket from './AddBucket.js';
 import fetch from 'node-fetch';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
 
 import s from './Buckets.scss';
 
@@ -143,25 +148,46 @@ class Buckets extends React.Component {
 
     onDeleteBucket(id){
       console.log("ready to delete" + id);
+      let local = this;
+      fetch('http://localhost:3030/admin/' + id, { method: 'DELETE'})
+        .then(function(res) {
+            fetch('http://localhost:3030/admin')
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log(JSON.stringify(json));
+                  local.setState({
+                    buckets:json
+                  })          
+              });
+        }).catch(function(err) {
+        console.log(err);
+    });
     }
 
     render() {
         return (
-            <MuiThemeProvider>
-                <Grid container styles={styles.root}>
+            <MuiThemeProvider muiTheme={getMuiTheme()}>
+                <div >
                     <Paper style={paperStyle} zDepth={4}>
-                    <Grid item className={s.container}>
+                    <div className={s.container}>
                         <h1>Jessica</h1>
-                    </Grid>
-                    <Button label="Default" raised={true} style={buttonStyle} onClick={this.showAddBucket}>Add Bucket</Button>
+                    </div>
+                    <RaisedButton label="Add Bucket" style={buttonStyle} onClick={this.showAddBucket}/>
                     { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
                     { this.state.buckets.map(function(bucket){
-                        return <Bucket b={bucket} deleteBucket={this.onDeleteBucket} />
+                        return (<div key={bucket._id}><Bucket b={bucket} deleteBucket={this.onDeleteBucket} /></div>)
                     }, this)};
                     </Paper>
-                </Grid>
+                </div>
             </MuiThemeProvider>
         );
     } 
 }
-export default withTheme(Buckets, s);
+export default withStyles(Buckets, s);
+
