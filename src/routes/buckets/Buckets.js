@@ -21,6 +21,8 @@ import fetch from 'node-fetch';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import s from './Buckets.scss';
 
@@ -50,44 +52,6 @@ const paperStyle = {
   // textAlign: 'center',
   display: 'inline-block',
 };
-
-// const d = [
-//   {
-//     "_id": "58f67e44282419e32cd33030",
-//     "friendlyName": "Misc",
-//     "friendlyColor": "Green",
-//     "filter": "Type=Misc",
-//     "__v": 0,
-//     "transactions": [
-//       {
-//         "amount": 52.14,
-//         "transactionType": "Food",
-//         "vendor": "Kroger",
-//         "label": "Food",
-//         "_id": "58f67e44282419e32cd33031",
-//         "date": "2017-04-18T20:59:48.992Z"
-//       },
-//       {
-//         "label": "Misc",
-//         "vendor": "Kroger",
-//         "transactionType": "Misc",
-//         "amount": 147.14,
-//         "_id": "58f92ce3a8725901591c0071",
-//         "date": "2017-04-20T21:49:23.112Z"
-//       },
-//       {
-//         "_id": "58ffb9546fe0c43cc5ae1727",
-//         "label": "Wine",
-//         "vendor": "Chateau Elan",
-//         "transactionType": "Wine",
-//         "amount": 30.99,
-//         "date": "2017-04-25T21:02:12.388Z"
-//       }
-//     ]
-//   }
-// ]
-
-
 
 class Buckets extends React.Component {
     constructor(props){
@@ -178,11 +142,13 @@ class Buckets extends React.Component {
                     <div className={s.container}>
                         <h1>Jessica</h1>
                     </div>
-                    <RaisedButton label="Add Bucket" style={buttonStyle} onClick={this.showAddBucket}/>
-                    { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
                     { this.state.buckets.map(function(bucket){
                         return (<div key={bucket._id}><Bucket b={bucket} deleteBucket={this.onDeleteBucket} /></div>)
-                    }, this)};
+                    }, this)}
+                    <div style={paperStyle}>
+                      <FloatingActionButton secondary={true} onClick={this.showAddBucket} ><ContentAdd/></FloatingActionButton>
+                      { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
+                    </div>
                     </Paper>
                 </div>
             </MuiThemeProvider>
