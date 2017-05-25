@@ -6,7 +6,7 @@ import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js';
 import TextField from 'material-ui/TextField';
 import {render, findDOMNode} from 'react-dom';
-//import DatePicker from 'material-ui/DatePicker';
+import DatePicker from 'material-ui/DatePicker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import s from './Buckets.scss';
@@ -40,8 +40,8 @@ class AddTransaction extends React.Component{
     constructor(props) {
         super(props)
         var dt = new Date().toLocaleTimeString()
-        this.state = {//date: dt,
-        amount: 0.0,
+        this.state = {date: '',
+        amount: '',
         transactionType: '',
         vendor: '',
         label: ''};
@@ -49,7 +49,7 @@ class AddTransaction extends React.Component{
         this.okClick = this.okClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-
+        this.handleDateInputChange = this.handleDateInputChange.bind(this);
     }
     okClick() {
         console.log(this.state.amount)
@@ -63,42 +63,49 @@ class AddTransaction extends React.Component{
         this.setState({[event.target.name]:event.target.value})
     }
 
+    // for datepickers, this is the signature. Event is always null
+    handleDateInputChange(event, dt) {
+        this.setState({date: dt})
+    }
+
     render(){
         return <div> 
             <TextField
                 value={this.state.amount}
                 onChange={this.handleInputChange}
-                label="Amount"
-                floatingLabelFixed={true}
+                floatingLabelText="Amount"
+                hintText="45.67"
+                type="number"
                 name="amount"
             /><br/>
             <TextField
                 value={this.state.vendor}
                 onChange={this.handleInputChange}
-                label="Vendor"
-                floatingLabelFixed={true}
+                floatingLabelText="Vendor"
+                hintText="Fox Bros."
                 name="vendor"
             /><br/>
             <TextField
                 value={this.state.label}
                 onChange={this.handleInputChange}
-                label="Label"
-                floatingLabelFixed={true}
+                floatingLabelText="Label"
+                hintText="Lunch with Joe."
                 name="label"
             /><br/>
             <TextField
                 value={this.state.transactionType}
                 onChange={this.handleInputChange}
-                label="Transaction Type"
-                floatingLabelFixed={true}
+                floatingLabelText="Transaction Type"
+                hintText="Restaurant"
                 name="transactionType"
             /><br/>
-            {/*<DatePicker
+            <DatePicker
                 value={this.state.date}
-                onChange={this.handleInputChange}
-                label="Date"
+                onChange={this.handleDateInputChange}
+                floatingLabelText="Date"
+                hintText="Date of transaction"
                 name="date"
-            /><br/>*/}
+            /><br/>
             <RaisedButton label="OK" style={buttonStyle} onClick={this.okClick}/>
             <RaisedButton label="Cancel" style={buttonStyle} onClick={this.cancelClick}/>
         </div>
