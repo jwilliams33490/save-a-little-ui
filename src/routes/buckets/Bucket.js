@@ -45,6 +45,8 @@ class Bucket extends React.Component{
         this.addTransaction = this.addTransaction.bind(this);
         this.cancelTransaction = this.cancelTransaction.bind(this);
         this.onDelete = this.onDelete.bind(this);
+        this.onDeleteTransaction = this.onDeleteTransaction.bind(this);
+        this.onEditTransaction = this.onEditTransaction.bind(this);
     }
     showAddTransaction(){
         this.setState({showAddTransaction:true})
@@ -71,8 +73,8 @@ class Bucket extends React.Component{
                   console.log(JSON.stringify(local.state));
               });
         }).catch(function(err) {
-        console.log(err);
-    });
+            console.log(err);
+        });
         this.setState({showAddTransaction:false});
     }
 
@@ -83,6 +85,35 @@ class Bucket extends React.Component{
     onDelete (){
         console.log("starting delete");
         this.props.deleteBucket(this.props.b._id);
+    }
+
+    onDeleteTransaction(id) {
+        console.log("deleting Transaction" + id)
+        let local = this;
+        fetch('http://localhost:3030/transaction/' + this.props.b._id + '/tid/' + id, { method: 'DELETE'})
+        .then(function(res) {
+            fetch('http://localhost:3030/transaction/' + local.props.b._id)
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log("here are the transactions" + JSON.stringify(json));
+                  local.setState({
+                    transactions:json
+                  })
+                  console.log(JSON.stringify(local.state));
+              });
+        }).catch(function(err) {
+            console.log(err);
+        });
+    }
+
+    onEditTransaction(data) {
+        console.log(data)
     }
 
     render(){
@@ -99,8 +130,8 @@ class Bucket extends React.Component{
                 <div >
                 {
                   this.state.transactions.map(function(trans){
-                        return <div key={trans._id}><Transaction t={trans}/></div>;
-                    })
+                        return <div key={trans._id}><Transaction t={trans} onDelete={this.onDeleteTransaction} onEdit={this.onEditTransaction}/></div>;
+                    }, this)
                 }
                 </div>
                 <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
