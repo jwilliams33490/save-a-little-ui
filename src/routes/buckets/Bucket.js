@@ -104,7 +104,7 @@ class Bucket extends React.Component{
                 }
                 </div>
                 <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
-                {this.showAddTransaction ?
+                {this.state.showAddTransaction ?
                     <AddTransaction onAddTransaction= {this.addTransaction} onCancelTransaction= {this.cancelTransaction}/>
                     : null
                 }
