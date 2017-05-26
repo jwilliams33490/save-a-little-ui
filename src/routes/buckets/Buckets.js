@@ -122,7 +122,7 @@ class Buckets extends React.Component {
                   console.log(res.statusText);
                   throw new Error(res.statusText);
                 }
-                  return res.json();
+                return res.json();
               }).then(function(json) {
                   console.log(JSON.stringify(json));
                   local.setState({
@@ -130,8 +130,8 @@ class Buckets extends React.Component {
                   })          
               });
         }).catch(function(err) {
-        console.log(err);
-    });
+          console.log(err);
+      });
     }
 
     render() {

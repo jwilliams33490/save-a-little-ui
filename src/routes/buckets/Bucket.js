@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
 import Transaction from './Transaction.js';
-import AddTransaction from './AddTransaction.js';
+import AddEditTransaction from './AddEditTransaction.js';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
@@ -112,8 +112,30 @@ class Bucket extends React.Component{
         });
     }
 
-    onEditTransaction(data) {
+    onEditTransaction(data, id) {
         console.log(data)
+        let local = this;
+        fetch('http://localhost:3030/transaction/' + this.props.b._id + '/tid/' + id, { method: 'PUT', headers: {'Content-Type': 'application/json'},
+         body: JSON.stringify(data)})
+        .then(function(res) {
+            fetch('http://localhost:3030/transaction/' + local.props.b._id)
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log("here are the transactions" + JSON.stringify(json));
+                  local.setState({
+                    transactions:json
+                  })
+                  console.log(JSON.stringify(local.state));
+              });
+        }).catch(function(err) {
+            console.log(err);
+        });
     }
 
     render(){
@@ -130,13 +152,16 @@ class Bucket extends React.Component{
                 <div >
                 {
                   this.state.transactions.map(function(trans){
-                        return <div key={trans._id}><Transaction t={trans} onDelete={this.onDeleteTransaction} onEdit={this.onEditTransaction}/></div>;
+                        return (
+                          <div key={trans._id}>
+                            <Transaction t={trans} onDelete={this.onDeleteTransaction} onEdit={this.onEditTransaction} onAddEditTransaction={this.onEditTransaction} />
+                          </div>);
                     }, this)
                 }
                 </div>
                 <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
                 {this.state.showAddTransaction ?
-                    <AddTransaction onAddTransaction= {this.addTransaction} onCancelTransaction= {this.cancelTransaction}/>
+                    <AddEditTransaction onAddEditTransaction={this.addTransaction} onCancelTransaction={this.cancelTransaction}/>
                     : null
                 }
                 </Paper>

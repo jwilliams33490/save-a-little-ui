@@ -6,6 +6,7 @@ import { withTheme, createStyleSheet} from 'material-ui/styles';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import AddEditTransaction from './AddEditTransaction.js';
 
 import s from './Buckets.scss';
 
@@ -25,18 +26,29 @@ const paperStyle = {
 class Transaction extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {editTransaction: false }
         this.state={checkDeleteTransaction:false};
         this.deleteTransaction = this.deleteTransaction.bind(this);
-        this.editTransaction = this.editTransaction.bind(this);
+        this.showEditTransaction = this.showEditTransaction.bind(this);
         this.deleteTransactionConfirmed = this.deleteTransactionConfirmed.bind(this);
         this.deleteTransactionAborted = this.deleteTransactionAborted.bind(this);
+        this.editTransaction = this.editTransaction.bind(this);
+        this.cancelEditTransaction = this.cancelEditTransaction.bind(this);
     }
     deleteTransaction(){
         this.setState ({checkDeleteTransaction:true});
         console.log("deleteing transaction:" + this.props.t._id);
     }
-    editTransaction(){
+    showEditTransaction(){
+        this.setState({editTransaction: true})
+    }
+    editTransaction(data) {
         console.log("edit this transaction:" + this.props.t._id);
+        this.props.onAddEditTransaction(data, this.props.t._id);
+        this.setState ({editTransaction:false});        
+    }
+    cancelEditTransaction() {
+        this.setState({editTransaction: false})
     }
 
     deleteTransactionConfirmed () {
@@ -64,7 +76,7 @@ class Transaction extends React.Component {
         return (
                 <div>
                     <Paper style={paperStyle}>
-                        <RaisedButton onClick={this.editTransaction} label="Edit Transaction" style={buttonStyle} />
+                        <RaisedButton onClick={this.showEditTransaction} label="Edit Transaction" style={buttonStyle} />
                         <RaisedButton onClick={this.deleteTransaction} label="Delete Transaction" style={buttonStyle} />
                         <Dialog
                             title="Delete Transaction"
@@ -74,11 +86,17 @@ class Transaction extends React.Component {
                             >
                             Are you sure?
                         </Dialog>
-                        <div>label: {this.props.t.label}</div>
-                        <div>vendor: {this.props.t.vendor}</div>
-                        <div>type: {this.props.t.transactionType}</div>
-                        <div>amount: {this.props.t.amount}</div>
-                        <div>date: {this.props.t.date}</div>
+                        {this.state.editTransaction ?
+                            <AddEditTransaction onAddEditTransaction={this.editTransaction} onCancelTransaction={this.cancelEditTransaction} t={this.props.t}/>
+                            :
+                            <div>
+                                <div>label: {this.props.t.label}</div>
+                                <div>vendor: {this.props.t.vendor}</div>
+                                <div>type: {this.props.t.transactionType}</div>
+                                <div>amount: {this.props.t.amount}</div>
+                                <div>date: {this.props.t.date}</div>
+                            </div>
+                        }
                     </Paper>
                 </div>);
     }
