@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
 import { withTheme, createStyleSheet} from 'material-ui/styles';
-import Transaction from './Transaction.js';
 import TextField from 'material-ui/TextField';
 import {render, findDOMNode} from 'react-dom';
 import DatePicker from 'material-ui/DatePicker';
@@ -36,15 +35,24 @@ const paperStyle = {
   display: 'inline-block',
 };
 
-class AddTransaction extends React.Component{
+class AddEditTransaction extends React.Component{
     constructor(props) {
         super(props)
         var dt = new Date().toLocaleTimeString()
-        this.state = {date: '',
-        amount: '',
-        transactionType: '',
-        vendor: '',
-        label: ''};
+
+        if (this.props.t) {
+            this.state = {date: this.props.t.date,
+            amount: this.props.t.amount,
+            transactionType: this.props.t.transactionType,
+            vendor: this.props.t.vendor,
+            label: this.props.t.label};
+        } else {
+            this.state = {date: '',
+            amount: '',
+            transactionType: '',
+            vendor: '',
+            label: ''};
+        }
 
         this.okClick = this.okClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
@@ -53,7 +61,7 @@ class AddTransaction extends React.Component{
     }
     okClick() {
         console.log(this.state.amount)
-        this.props.onAddTransaction(this.state);
+        this.props.onAddEditTransaction(this.state);
     }
     cancelClick() {
         console.log(this.state.vendor) 
@@ -112,4 +120,4 @@ class AddTransaction extends React.Component{
     }
 }
 
-export default withStyles(AddTransaction, s);
+export default withStyles(AddEditTransaction, s);

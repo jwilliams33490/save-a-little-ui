@@ -16,7 +16,7 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Bucket from './Bucket.js';
-import AddBucket from './AddBucket.js';
+import AddEditBucket from './AddEditBucket.js';
 import fetch from 'node-fetch';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -57,8 +57,9 @@ class Buckets extends React.Component {
     constructor(props){
         super(props);
         this.state = {showAddBucket: false,buckets:[]}
-        this.showAddBucket= this.showAddBucket.bind(this);
-        this.onAddBucket= this.onAddBucket.bind(this);
+        this.showAddBucket = this.showAddBucket.bind(this);
+        this.onAddBucket = this.onAddBucket.bind(this);
+        this.onEditBucket = this.onEditBucket.bind(this)
         this.onCancelBucket= this.onCancelBucket.bind(this);
         this.onDeleteBucket = this.onDeleteBucket.bind(this);
     }
@@ -88,11 +89,34 @@ class Buckets extends React.Component {
                   })          
               });
         }).catch(function(err) {
-        console.log(err);
-    });
-
-
+            console.log(err);
+        });
        this.setState({showAddBucket: false});
+    }
+    onEditBucket(data, id){
+      console.log('about to add bucket ' + JSON.stringify(data));
+      const postData = {friendlyName: data.name, friendlyColor: data.color, filter: data.filter, transactions: []}
+      let local = this;
+      fetch('http://localhost:3030/admin/' + id, { method: 'PUT', headers: {'Content-Type': 'application/json'},
+         body: JSON.stringify(postData)})
+        .then(function(res) {
+            fetch('http://localhost:3030/admin')
+              .then(function(res) {
+                if(!res.ok){
+                  console.log(res.status);
+                  console.log(res.statusText);
+                  throw new Error(res.statusText);
+                }
+                  return res.json();
+              }).then(function(json) {
+                  console.log(JSON.stringify(json));
+                  local.setState({
+                    buckets:json
+                  })          
+              });
+        }).catch(function(err) {
+            console.log(err);
+        });
     }
     onCancelBucket(){
       this.setState({showAddBucket: false});
@@ -122,7 +146,7 @@ class Buckets extends React.Component {
                   console.log(res.statusText);
                   throw new Error(res.statusText);
                 }
-                  return res.json();
+                return res.json();
               }).then(function(json) {
                   console.log(JSON.stringify(json));
                   local.setState({
@@ -130,8 +154,8 @@ class Buckets extends React.Component {
                   })          
               });
         }).catch(function(err) {
-        console.log(err);
-    });
+          console.log(err);
+      });
     }
 
     render() {
@@ -143,11 +167,11 @@ class Buckets extends React.Component {
                         <h1>Jessica</h1>
                     </div>
                     { this.state.buckets.map(function(bucket){
-                        return (<div key={bucket._id}><Bucket b={bucket} deleteBucket={this.onDeleteBucket} /></div>)
+                        return (<div key={bucket._id}><Bucket b={bucket} deleteBucket={this.onDeleteBucket} onEditBucket={this.onEditBucket} /></div>)
                     }, this)}
                     <div style={paperStyle}>
                       <FloatingActionButton secondary={true} onClick={this.showAddBucket} ><ContentAdd/></FloatingActionButton>
-                      { this.state.showAddBucket ? <AddBucket onAddBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
+                      { this.state.showAddBucket ? <AddEditBucket onAddEditBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
                     </div>
                     </Paper>
                 </div>

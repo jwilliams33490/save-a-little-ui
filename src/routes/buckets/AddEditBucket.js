@@ -36,10 +36,14 @@ const paperStyle = {
   display: 'inline-block',
 };
 
-class AddBucket extends React.Component{
+class AddEditBucket extends React.Component{
     constructor(props){
         super(props)
-        this.state = {name:'', color:'', filter:''};
+        if (this.props.b) {
+            this.state = {name: this.props.b.friendlyName, color: this.props.b.friendlyColor, filter: this.props.b.filter};
+        } else {
+            this.state = {name:'', color:'', filter:''};
+        }
 
         this.okClick = this.okClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
@@ -49,7 +53,7 @@ class AddBucket extends React.Component{
     }
     okClick() {
         console.log(this.state.name)
-        this.props.onAddBucket(this.state);
+        this.props.onAddEditBucket(this.state);
     }
     cancelClick() {
         console.log(this.state.color) 
@@ -91,4 +95,4 @@ class AddBucket extends React.Component{
     }
 }
 
-export default withStyles(AddBucket, s);
+export default withStyles(AddEditBucket, s);
