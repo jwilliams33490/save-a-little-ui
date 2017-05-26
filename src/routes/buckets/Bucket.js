@@ -8,6 +8,7 @@ import AddEditTransaction from './AddEditTransaction.js';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import AddEditBucket from './AddEditBucket.js';
 
 import s from './Buckets.scss';
 
@@ -40,6 +41,9 @@ const paperStyle = {
 class Bucket extends React.Component{
     constructor(props){
         super(props)
+        this.state = {showEditBucket: false}
+
+
         this.state={showAddTransaction:false, transactions:props.b.transactions}
         this.showAddTransaction = this.showAddTransaction.bind(this);
         this.addTransaction = this.addTransaction.bind(this);
@@ -47,6 +51,19 @@ class Bucket extends React.Component{
         this.onDelete = this.onDelete.bind(this);
         this.onDeleteTransaction = this.onDeleteTransaction.bind(this);
         this.onEditTransaction = this.onEditTransaction.bind(this);
+        this.showEditBucket = this.showEditBucket.bind(this);
+        this.onEditBucket = this.onEditBucket.bind(this);
+        this.onCancelEditBucket = this.onCancelEditBucket.bind(this);
+    }
+    showEditBucket() {
+      this.setState({showEditBucket: true});
+    }
+    onEditBucket(data) {
+      this.props.onEditBucket(data, this.props.b._id);
+      this.setState({showEditBucket: false});
+    }
+    onCancelEditBucket() {
+      this.setState({showEditBucket: false});
     }
     showAddTransaction(){
         this.setState({showAddTransaction:true})
@@ -145,24 +162,30 @@ class Bucket extends React.Component{
                 showMenuIconButton={false}
                 title={<span style={styles.title}>{this.props.b.friendlyName}</span>}
                 iconElementRight={<span>
-                <FlatButton label="Edit Bucket" />
-                <FlatButton label="Delete Bucket" onClick={this.onDelete}/>
+                <FlatButton label="Edit Bucket" onClick={this.showEditBucket} />
+                <FlatButton label="Delete Bucket" onClick={this.onDelete} />
                 </span>}
                 />
-                <div >
-                {
-                  this.state.transactions.map(function(trans){
-                        return (
-                          <div key={trans._id}>
-                            <Transaction t={trans} onDelete={this.onDeleteTransaction} onEdit={this.onEditTransaction} onAddEditTransaction={this.onEditTransaction} />
-                          </div>);
-                    }, this)
-                }
-                </div>
-                <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
-                {this.state.showAddTransaction ?
-                    <AddEditTransaction onAddEditTransaction={this.addTransaction} onCancelTransaction={this.cancelTransaction}/>
-                    : null
+                {this.state.showEditBucket ?
+                  <AddEditBucket onAddEditBucket={this.onEditBucket} onCancelBucket={this.onCancelEditBucket} b={this.props.b} />
+                  :
+                  <div>
+                    <div >
+                    {
+                      this.state.transactions.map(function(trans){
+                            return (
+                              <div key={trans._id}>
+                                <Transaction t={trans} onDelete={this.onDeleteTransaction} onEdit={this.onEditTransaction} onAddEditTransaction={this.onEditTransaction} />
+                              </div>);
+                        }, this)
+                    }
+                    </div>
+                    <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
+                    {this.state.showAddTransaction ?
+                        <AddEditTransaction onAddEditTransaction={this.addTransaction} onCancelTransaction={this.cancelTransaction}/>
+                        : null
+                    }
+                  </div>
                 }
                 </Paper>
             </div>
