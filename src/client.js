@@ -9,7 +9,6 @@
 
 import 'babel-polyfill';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import FastClick from 'fastclick';
 import Router from './routes';
 import Location from './core/Location';
