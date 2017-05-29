@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import Buckets from './Buckets.js';
+import Buckets from './Buckets';
 
 export const path = '/buckets';
 export const action = async (state) => {
