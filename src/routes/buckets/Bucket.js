@@ -8,7 +8,12 @@ import AddEditTransaction from './AddEditTransaction.js';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import AddEditBucket from './AddEditBucket.js';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import s from './Buckets.scss';
 
@@ -157,13 +162,13 @@ class Bucket extends React.Component{
 
     render(){
         return <div>
-                <Paper style={paperStyle} zDepth={5}>
+                <Paper style={paperStyle} zDepth={3}>
                 <AppBar
                 showMenuIconButton={false}
                 title={<span style={styles.title}>{this.props.b.friendlyName}</span>}
                 iconElementRight={<span>
-                <FlatButton label="Edit Bucket" onClick={this.showEditBucket} />
-                <FlatButton label="Delete Bucket" onClick={this.onDelete} />
+                <IconButton tooltip="Edit" onClick={this.showEditBucket} ><EditorModeEdit/></IconButton>
+                <IconButton tooltip="Delete" onClick={this.onDelete} ><ActionDelete /></IconButton>
                 </span>}
                 />
                 {this.state.showEditBucket ?
@@ -180,11 +185,13 @@ class Bucket extends React.Component{
                         }, this)
                     }
                     </div>
-                    <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction}/>
+                    <div style={paperStyle}>
+                    <FloatingActionButton mini={true} secondary={true} onClick={this.showAddTransaction}><ContentAdd/></FloatingActionButton>
                     {this.state.showAddTransaction ?
                         <AddEditTransaction onAddEditTransaction={this.addTransaction} onCancelTransaction={this.cancelTransaction}/>
                         : null
                     }
+                    </div>
                   </div>
                 }
                 </Paper>

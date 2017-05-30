@@ -24,6 +24,7 @@ injectTapEventPlugin();
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
+
 import s from './Buckets.scss';
 
 const styles = {
@@ -162,10 +163,6 @@ class Buckets extends React.Component {
         return (
             <MuiThemeProvider muiTheme={getMuiTheme()}>
                 <div >
-                    <Paper style={paperStyle} zDepth={4}>
-                    <div className={s.container}>
-                        <h1>Jessica</h1>
-                    </div>
                     { this.state.buckets.map(function(bucket){
                         return (<div key={bucket._id}><Bucket b={bucket} deleteBucket={this.onDeleteBucket} onEditBucket={this.onEditBucket} /></div>)
                     }, this)}
@@ -173,7 +170,6 @@ class Buckets extends React.Component {
                       <FloatingActionButton secondary={true} onClick={this.showAddBucket} ><ContentAdd/></FloatingActionButton>
                       { this.state.showAddBucket ? <AddEditBucket onAddEditBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
                     </div>
-                    </Paper>
                 </div>
             </MuiThemeProvider>
         );

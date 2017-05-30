@@ -7,6 +7,10 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import AddEditTransaction from './AddEditTransaction.js';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import IconButton from 'material-ui/IconButton';
+import Moment from 'moment';
 
 import s from './Buckets.scss';
 
@@ -75,9 +79,9 @@ class Transaction extends React.Component {
             ];
         return (
                 <div>
-                    <Paper style={paperStyle}>
-                        <RaisedButton onClick={this.showEditTransaction} label="Edit Transaction" style={buttonStyle} />
-                        <RaisedButton onClick={this.deleteTransaction} label="Delete Transaction" style={buttonStyle} />
+                    <Paper style={paperStyle} zDepth={3}>
+                        <IconButton tooltip="Edit" onClick={this.showEditTransaction} style={buttonStyle} > <EditorModeEdit/> </IconButton>
+                        <IconButton tooltip="Delete" onClick={this.deleteTransaction} style={buttonStyle} > <ActionDelete/> </IconButton>
                         <Dialog
                             title="Delete Transaction"
                             actions={actions}
@@ -89,12 +93,12 @@ class Transaction extends React.Component {
                         {this.state.editTransaction ?
                             <AddEditTransaction onAddEditTransaction={this.editTransaction} onCancelTransaction={this.cancelEditTransaction} t={this.props.t}/>
                             :
-                            <div>
-                                <div>label: {this.props.t.label}</div>
-                                <div>vendor: {this.props.t.vendor}</div>
-                                <div>type: {this.props.t.transactionType}</div>
-                                <div>amount: {this.props.t.amount}</div>
-                                <div>date: {this.props.t.date}</div>
+                            <div style={buttonStyle}>
+                                <div>Label: {this.props.t.label}</div>
+                                <div>Vendor: {this.props.t.vendor}</div>
+                                <div>Type: {this.props.t.transactionType}</div>
+                                <div>Amount: {this.props.t.amount}</div>
+                                <div>Date: {Moment(this.props.t.date).format('MMM Do, YYYY')}</div>
                             </div>
                         }
                     </Paper>
