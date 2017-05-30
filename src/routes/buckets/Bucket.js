@@ -14,6 +14,7 @@ import ActionDelete from 'material-ui/svg-icons/action/delete';
 import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+import Dialog from 'material-ui/Dialog';
 
 import s from './Buckets.scss';
 
@@ -46,10 +47,7 @@ const paperStyle = {
 class Bucket extends React.Component{
     constructor(props){
         super(props)
-        this.state = {showEditBucket: false}
-
-
-        this.state={showAddTransaction:false, transactions:props.b.transactions}
+        this.state={showAddTransaction:false, transactions:props.b.transactions, checkDeleteBucket: false, showEditBucket: false}
         this.showAddTransaction = this.showAddTransaction.bind(this);
         this.addTransaction = this.addTransaction.bind(this);
         this.cancelTransaction = this.cancelTransaction.bind(this);
@@ -59,6 +57,8 @@ class Bucket extends React.Component{
         this.showEditBucket = this.showEditBucket.bind(this);
         this.onEditBucket = this.onEditBucket.bind(this);
         this.onCancelEditBucket = this.onCancelEditBucket.bind(this);
+        this.deleteBucketAborted = this.deleteBucketAborted.bind(this);
+        this.deleteBucketConfirmed = this.deleteBucketConfirmed.bind(this);
     }
     showEditBucket() {
       this.setState({showEditBucket: true});
@@ -106,7 +106,16 @@ class Bucket extends React.Component{
 
     onDelete (){
         console.log("starting delete");
+        this.setState({checkDeleteBucket: true});
+    }
+
+    deleteBucketConfirmed () {
         this.props.deleteBucket(this.props.b._id);
+        this.setState ({checkDeleteBucket:false});
+    }
+
+    deleteBucketAborted () {
+        this.setState ({checkDeleteBucket:false});
     }
 
     onDeleteTransaction(id) {
@@ -161,6 +170,18 @@ class Bucket extends React.Component{
     }
 
     render(){
+      const actions = [
+            <FlatButton
+                label="OK"
+                primary={true}
+                onTouchTap={this.deleteBucketConfirmed}
+            />,
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={this.deleteBucketAborted}
+            />,
+            ];
         return <div>
                 <Paper style={paperStyle} zDepth={3}>
                 <AppBar
@@ -171,6 +192,14 @@ class Bucket extends React.Component{
                 <IconButton tooltip="Delete" onClick={this.onDelete} ><ActionDelete /></IconButton>
                 </span>}
                 />
+                 <Dialog
+                            title="Delete Bucket"
+                            actions={actions}
+                            modal={true}
+                            open={this.state.checkDeleteBucket}
+                            >
+                            Are you sure?
+                        </Dialog>
                 {this.state.showEditBucket ?
                   <AddEditBucket onAddEditBucket={this.onEditBucket} onCancelBucket={this.onCancelEditBucket} b={this.props.b} />
                   :
