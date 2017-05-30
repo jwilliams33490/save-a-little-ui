@@ -10,7 +10,7 @@
 import React from 'react';
 import Buckets from './Buckets.js';
 
-export const path = '/buckets';
+export const path = '/';
 export const action = async (state) => {
   const title = 'Financial Buckets';
   state.context.onSetTitle(title);
