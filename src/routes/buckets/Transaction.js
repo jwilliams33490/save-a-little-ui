@@ -103,4 +103,17 @@ class Transaction extends React.Component {
   }
 }
 
+Transaction.propTypes = {
+  t: PropTypes.shape({
+    _id: PropTypes.string,
+    label: PropTypes.string,
+    vendor: PropTypes.string,
+    transactionType: PropTypes.string,
+    amount: PropTypes.number,
+    date: PropTypes.date,
+  }).isRequired,
+  onAddEditTransaction: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+
 export default withStyles(Transaction, s);
