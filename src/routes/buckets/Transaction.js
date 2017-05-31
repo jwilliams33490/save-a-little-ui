@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -77,8 +76,8 @@ class Transaction extends React.Component {
     return (
       <div>
         <Paper style={paperStyle} zDepth={3}>
-          <IconButton tooltip="Edit" onClick={this.showEditTransaction} style={buttonStyle} > <EditorModeEdit/> </IconButton>
-          <IconButton tooltip="Delete" onClick={this.deleteTransaction} style={buttonStyle} > <ActionDelete/> </IconButton>
+          <IconButton tooltip="Edit" onClick={this.showEditTransaction} style={buttonStyle} > <EditorModeEdit /> </IconButton>
+          <IconButton tooltip="Delete" onClick={this.deleteTransaction} style={buttonStyle} > <ActionDelete /> </IconButton>
           <Dialog
             title="Delete Transaction"
             actions={actions}

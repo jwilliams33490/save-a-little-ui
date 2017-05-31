@@ -8,7 +8,6 @@
  */
 
 import React from 'react';
-import Paper from 'material-ui/Paper';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import fetch from 'node-fetch';
@@ -116,7 +115,6 @@ class Buckets extends React.Component {
     fetch('http://localhost:3030/admin')
       .then(res => res.json(),
       ).then((json) => {
-        console.log(json);
         local.setState({
           buckets: json,
         });

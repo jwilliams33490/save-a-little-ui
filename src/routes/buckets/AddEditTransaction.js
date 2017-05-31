@@ -98,14 +98,14 @@ AddEditTransaction.propTypes = ({
   onCancelTransaction: PropTypes.func.isRequired,
 });
 
-AddEditTransaction.defaultProps = function() {
-  let d = new Date(Date.now());
-  let n = d.toDateString();
+AddEditTransaction.defaultProps = (function () {
+  const d = new Date(Date.now());
+  const n = d.toDateString();
   return ({
     t: {
       date: n, amount: 0, transactionType: '', vendor: '', label: '',
     },
   });
-}();
+}());
 
 export default withStyles(AddEditTransaction, s);
