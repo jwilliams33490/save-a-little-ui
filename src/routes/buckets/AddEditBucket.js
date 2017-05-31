@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { TwitterPicker } from 'react-color';
 
 import s from './Buckets.scss';
 
@@ -15,9 +16,10 @@ class AddEditBucket extends React.Component {
     if (this.props.b) {
       this.state = { name: this.props.b.friendlyName,
         color: this.props.b.friendlyColor,
-        filter: this.props.b.filter };
+        filter: this.props.b.filter, 
+        showColorPicker:false };
     } else {
-      this.state = { name: '', color: '', filter: '' };
+      this.state = { name: '', color: '', filter: '', showColorPicker:false };
     }
 
     this.okClick = this.okClick.bind(this);
@@ -25,6 +27,8 @@ class AddEditBucket extends React.Component {
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleColorChange = this.handleColorChange.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
+    this.handleColorChangeComplete = this.handleColorChangeComplete.bind(this);
+    this.onColorClicked = this.onColorClicked.bind(this);
   }
   okClick() {
     this.props.onAddEditBucket(this.state);
@@ -41,8 +45,21 @@ class AddEditBucket extends React.Component {
   handleFilterChange(event) {
     this.setState({ filter: event.target.value });
   }
+
+  handleColorChangeComplete (color, event) {
+    this.setState({ color: color.hex });
+    this.setState({showColorPicker:false});
+  }
+
+  onColorClicked(event) {
+    console.log("clicked")
+    this.setState({showColorPicker:true});
+  }
+
   render() {
+    let divStyle= {background: this.state.color};
     return (<div>
+      <div style={divStyle}>&nbsp; </div>
       <TextField
         value={this.state.name}
         onChange={this.handleNameChange}
@@ -54,7 +71,11 @@ class AddEditBucket extends React.Component {
         onChange={this.handleColorChange}
         hintText="Blue"
         floatingLabelText="Color"
+        onClick={this.onColorClicked}
       /><br />
+      { this.state.showColorPicker ?
+      <TwitterPicker  onChangeComplete={ this.handleColorChangeComplete } color={ this.state.color } />
+      : null }
       <TextField
         value={this.state.filter}
         onChange={this.handleFilterChange}
