@@ -1,10 +1,6 @@
 import React, { PropTypes } from 'react';
-// import Grid from 'material-ui/Grid';
-import Paper from 'material-ui/Paper';
 import RaisedButton from 'material-ui/RaisedButton';
-import { withTheme, createStyleSheet} from 'material-ui/styles';
 import TextField from 'material-ui/TextField';
-import {render, findDOMNode} from 'react-dom';
 import DatePicker from 'material-ui/DatePicker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -14,45 +10,17 @@ const buttonStyle = {
   margin: 12,
 };
 
-const styles = {
-  root:{
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'space-around',
-  },
-  gridList: {
-  width: 500,
-  height: 450,
-  overflowY: 'auto',
-  },
-};
-
-const paperStyle = {
-//   height: 100,
-//   width: 100,
-  margin: 20,
-  // textAlign: 'center',
-  display: 'inline-block',
-};
-
-class AddEditTransaction extends React.Component{
+class AddEditTransaction extends React.Component {
   constructor(props) {
-    super(props)
-    var dt = new Date().toLocaleTimeString()
+    super(props);
 
-    if (this.props.t) {
-      this.state = {date: this.props.t.date,
+    this.state = {
+      date: this.props.t.date,
       amount: this.props.t.amount,
       transactionType: this.props.t.transactionType,
       vendor: this.props.t.vendor,
-      label: this.props.t.label};
-    } else {
-      this.state = {date: '',
-      amount: '',
-      transactionType: '',
-      vendor: '',
-      label: ''};
-    }
+      label: this.props.t.label,
+    };
 
     this.okClick = this.okClick.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -60,24 +28,22 @@ class AddEditTransaction extends React.Component{
     this.handleDateInputChange = this.handleDateInputChange.bind(this);
   }
   okClick() {
-    console.log(this.state.amount)
     this.props.onAddEditTransaction(this.state);
   }
   cancelClick() {
-    console.log(this.state.vendor) 
     this.props.onCancelTransaction();
   }
   handleInputChange(event) {
-    this.setState({[event.target.name]:event.target.value})
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   // for datepickers, this is the signature. Event is always null
   handleDateInputChange(event, dt) {
-    this.setState({date: dt})
+    this.setState({ date: dt });
   }
 
-  render(){
-    return <div> 
+  render() {
+    return (<div>
       <TextField
         value={this.state.amount}
         onChange={this.handleInputChange}
@@ -108,7 +74,7 @@ class AddEditTransaction extends React.Component{
         name="transactionType"
       /><br />
       <DatePicker
-        value={this.state.date}
+        value={new Date(this.state.date)}
         onChange={this.handleDateInputChange}
         floatingLabelText="Date"
         hintText="Date of transaction"
@@ -116,8 +82,30 @@ class AddEditTransaction extends React.Component{
       /><br />
       <RaisedButton label="OK" style={buttonStyle} onClick={this.okClick} />
       <RaisedButton label="Cancel" style={buttonStyle} onClick={this.cancelClick} />
-    </div>
+    </div>);
   }
 }
+
+AddEditTransaction.propTypes = ({
+  t: PropTypes.shape({
+    date: PropTypes.string.isRequired,
+    amount: PropTypes.number.isRequired,
+    transactionType: PropTypes.string.isRequired,
+    vendor: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  }),
+  onAddEditTransaction: PropTypes.func.isRequired,
+  onCancelTransaction: PropTypes.func.isRequired,
+});
+
+AddEditTransaction.defaultProps = function() {
+  let d = new Date(Date.now());
+  let n = d.toDateString();
+  return ({
+    t: {
+      date: n, amount: 0, transactionType: '', vendor: '', label: '',
+    },
+  });
+}();
 
 export default withStyles(AddEditTransaction, s);
