@@ -7,45 +7,21 @@
  * LICENSE.txt file in the root directory of this source tree.
  */
 
-import React, { PropTypes } from 'react';
-// import Grid from 'material-ui/Grid';
-import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
-import { withTheme, createStyleSheet} from 'material-ui/styles';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import Bucket from './Bucket.js';
-import AddEditBucket from './AddEditBucket.js';
 import fetch from 'node-fetch';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
-
+import Bucket from './Bucket';
+import AddEditBucket from './AddEditBucket';
 import s from './Buckets.scss';
 
-const styles = {
-  root: { 
-    display: 'flex',
-    flexWrap: 'wrap',
-   justifyContent: 'space-around',
-  },
-  gridList: {
-    width: 500,
-    height: 450,
-    overflowY: 'auto',
-  },
-};
+injectTapEventPlugin();
 
-
-const buttonStyle = {
-  margin: 12,
-};
-
-const paperStyle = { 
+const paperStyle = {
 
 //   height: 100,
 //   width: 100,
@@ -55,125 +31,148 @@ const paperStyle = {
 };
 
 class Buckets extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {showAddBucket: false,buckets:[]}
-        this.showAddBucket = this.showAddBucket.bind(this);
-        this.onAddBucket = this.onAddBucket.bind(this);
-        this.onEditBucket = this.onEditBucket.bind(this)
-        this.onCancelBucket= this.onCancelBucket.bind(this);
-        this.onDeleteBucket = this.onDeleteBucket.bind(this);
-    }
-    showAddBucket(){
-       this.setState({showAddBucket: true});
-    }
+  constructor(props) {
+    super(props);
+    this.state = { showAddBucket: false, buckets: [] };
+    this.showAddBucket = this.showAddBucket.bind(this);
+    this.onAddBucket = this.onAddBucket.bind(this);
+    this.onEditBucket = this.onEditBucket.bind(this);
+    this.onCancelBucket = this.onCancelBucket.bind(this);
+    this.onDeleteBucket = this.onDeleteBucket.bind(this);
+  }
 
-    onAddBucket(data){
-      console.log('about to add bucket ' + JSON.stringify(data));
-      const postData = {friendlyName: data.name, friendlyColor: data.color, filter: data.filter, transactions: []}
-      let local = this;
-      fetch('http://localhost:3030/admin', { method: 'POST', headers: {'Content-Type': 'application/json'},
-         body: JSON.stringify(postData)})
-        .then(function(res) {
-            fetch('http://localhost:3030/admin')
-              .then(function(res) {
-                if(!res.ok){
-                  console.log(res.status);
-                  console.log(res.statusText);
-                  throw new Error(res.statusText);
-                }
-                  return res.json();
-              }).then(function(json) {
-                  console.log(JSON.stringify(json));
-                  local.setState({
-                    buckets:json
-                  })          
-              });
-        }).catch(function(err) {
-            console.log(err);
-        });
-       this.setState({showAddBucket: false});
-    }
-    onEditBucket(data, id){
-      console.log('about to add bucket ' + JSON.stringify(data));
-      const postData = {friendlyName: data.name, friendlyColor: data.color, filter: data.filter, transactions: []}
-      let local = this;
-      fetch('http://localhost:3030/admin/' + id, { method: 'PUT', headers: {'Content-Type': 'application/json'},
-         body: JSON.stringify(postData)})
-        .then(function(res) {
-            fetch('http://localhost:3030/admin')
-              .then(function(res) {
-                if(!res.ok){
-                  console.log(res.status);
-                  console.log(res.statusText);
-                  throw new Error(res.statusText);
-                }
-                  return res.json();
-              }).then(function(json) {
-                  console.log(JSON.stringify(json));
-                  local.setState({
-                    buckets:json
-                  })          
-              });
-        }).catch(function(err) {
-            console.log(err);
-        });
-    }
-    onCancelBucket(){
-      this.setState({showAddBucket: false});
-    }
-    componentDidMount(){
-      var local = this;
-        fetch('http://localhost:3030/admin')
-          .then(function(res) {
-              return res.json();
-          }).then(function(json) {
-              console.log(json);
-              local.setState({
-                buckets:json
-              });          
+  showAddBucket() {
+    this.setState({ showAddBucket: true });
+  }
+
+  onAddBucket(data) {
+    const postData = {
+      friendlyName: data.name,
+      friendlyColor: data.color,
+      filter: data.filter,
+      transactions: [],
+    };
+    const local = this;
+    fetch('http://localhost:3030/admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(postData),
+    })
+    .then(() => {
+      fetch('http://localhost:3030/admin')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${res.status}: ${res.statusText}`);
+          }
+          return res.json();
+        }).then((json) => {
+          local.setState({
+            buckets: json,
           });
-    }
+        });
+    }).catch((err) => {
+      console.log(err);
+    });
+    this.setState({ showAddBucket: false });
+  }
 
-    onDeleteBucket(id){
-      console.log("ready to delete" + id);
-      let local = this;
-      fetch('http://localhost:3030/admin/' + id, { method: 'DELETE'})
-        .then(function(res) {
-            fetch('http://localhost:3030/admin')
-              .then(function(res) {
-                if(!res.ok){
-                  console.log(res.status);
-                  console.log(res.statusText);
-                  throw new Error(res.statusText);
-                }
-                return res.json();
-              }).then(function(json) {
-                  console.log(JSON.stringify(json));
-                  local.setState({
-                    buckets:json
-                  })          
-              });
-        }).catch(function(err) {
-          console.log(err);
+  onEditBucket(data, id) {
+    const postData = {
+      friendlyName: data.name,
+      friendlyColor: data.color,
+      filter: data.filter,
+      transactions: [],
+    };
+    const local = this;
+    fetch(`http://localhost:3030/admin/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(postData),
+    })
+    .then(() => {
+      fetch('http://localhost:3030/admin')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${res.status}: ${res.statusText}`);
+          }
+          return res.json();
+        }).then((json) => {
+          local.setState({
+            buckets: json,
+          });
+        });
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  onCancelBucket() {
+    this.setState({ showAddBucket: false });
+  }
+
+  componentDidMount() {
+    const local = this;
+    fetch('http://localhost:3030/admin')
+      .then(res => res.json(),
+      ).then((json) => {
+        local.setState({
+          buckets: json,
+        });
       });
-    }
+  }
 
-    render() {
-        return (
-            <MuiThemeProvider muiTheme={getMuiTheme()}>
-                <div >
-                    { this.state.buckets.map(function(bucket){
-                        return (<div key={bucket._id}><Bucket b={bucket} deleteBucket={this.onDeleteBucket} onEditBucket={this.onEditBucket} /></div>)
-                    }, this)}
-                    <div style={paperStyle}>
-                      <FloatingActionButton secondary={true} onClick={this.showAddBucket} ><ContentAdd/></FloatingActionButton>
-                      { this.state.showAddBucket ? <AddEditBucket onAddEditBucket= {this.onAddBucket} onCancelBucket= {this.onCancelBucket} /> : null }
-                    </div>
-                </div>
-            </MuiThemeProvider>
-        );
-    } 
+  onDeleteBucket(id) {
+    const local = this;
+    fetch(`http://localhost:3030/admin/${id}`, { method: 'DELETE' })
+    .then(() => {
+      fetch('http://localhost:3030/admin')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`${res.status}: ${res.statusText}`);
+          }
+          return res.json();
+        }).then((json) => {
+          local.setState({
+            buckets: json,
+          });
+        });
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  render() {
+    return (
+      <MuiThemeProvider muiTheme={getMuiTheme()}>
+        <div >
+          <div style={{display: 'flex', flexWrap: 'wrap'}}>
+            { this.state.buckets.map(bucket =>
+              (<div key={bucket._id}>
+                <Bucket
+                  b={bucket}
+                  deleteBucket={this.onDeleteBucket}
+                  onEditBucket={this.onEditBucket}
+                />
+              </div>)
+            , this)}
+          </div>
+          <div style={{margin:'20'}}>
+            { this.state.showAddBucket ?
+              <AddEditBucket
+                onAddEditBucket={this.onAddBucket}
+                onCancelBucket={this.onCancelBucket}
+              /> : null }
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+              <FloatingActionButton secondary={true} onClick={this.showAddBucket}>
+                <ContentAdd />
+              </FloatingActionButton>
+            </div>
+          </div>
+        </div>
+      </MuiThemeProvider>
+    );
+  }
 }
+
 export default withStyles(Buckets, s);
 

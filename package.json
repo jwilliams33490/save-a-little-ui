@@ -107,6 +107,7 @@
     ]
   },
   "scripts": {
+    "focusedlint": "eslint src/routes/buckets && jscs src/routes/buckets --verbose",
     "lint": "eslint src tools && jscs src tools --verbose",
     "csslint": "csscomb src/components --lint --verbose",
     "csscomb": "csscomb src/components --verbose",
