@@ -145,24 +145,28 @@ class Buckets extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div >
-          { this.state.buckets.map(bucket =>
-            (<div key={bucket._id}>
-              <Bucket
-                b={bucket}
-                deleteBucket={this.onDeleteBucket}
-                onEditBucket={this.onEditBucket}
-              />
-            </div>)
-          , this)}
-          <div style={paperStyle}>
-            <FloatingActionButton secondary={true} onClick={this.showAddBucket}>
-              <ContentAdd />
-            </FloatingActionButton>
+          <div style={{display: 'flex', flexWrap: 'wrap'}}>
+            { this.state.buckets.map(bucket =>
+              (<div key={bucket._id}>
+                <Bucket
+                  b={bucket}
+                  deleteBucket={this.onDeleteBucket}
+                  onEditBucket={this.onEditBucket}
+                />
+              </div>)
+            , this)}
+          </div>
+          <div style={{margin:'20'}}>
             { this.state.showAddBucket ?
               <AddEditBucket
                 onAddEditBucket={this.onAddBucket}
                 onCancelBucket={this.onCancelBucket}
               /> : null }
+            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+              <FloatingActionButton secondary={true} onClick={this.showAddBucket}>
+                <ContentAdd />
+              </FloatingActionButton>
+            </div>
           </div>
         </div>
       </MuiThemeProvider>

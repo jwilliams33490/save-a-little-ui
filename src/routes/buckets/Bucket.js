@@ -209,14 +209,7 @@ class Bucket extends React.Component {
                   , this)
               }
             </div>
-            <div style={paperStyle}>
-              <FloatingActionButton
-                mini={true}
-                secondary={true}
-                onClick={this.showAddTransaction}
-              >
-                <ContentAdd />
-              </FloatingActionButton>
+            <div style={{margin:'20'}}>
               {this.state.showAddTransaction ?
                 <AddEditTransaction
                   onAddEditTransaction={this.addTransaction}
@@ -224,6 +217,15 @@ class Bucket extends React.Component {
                 />
                 : null
               }
+              <div  style={{display: 'flex', justifyContent: 'flex-end'}}>
+                <FloatingActionButton
+                  mini={true}
+                  secondary={true}
+                  onClick={this.showAddTransaction}
+                >
+                  <ContentAdd />
+                </FloatingActionButton>
+              </div>
             </div>
           </div>
         }
