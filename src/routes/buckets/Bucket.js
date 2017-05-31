@@ -4,6 +4,12 @@ import RaisedButton from 'material-ui/RaisedButton';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
+import EditorModeEdit from 'material-ui/svg-icons/editor/mode-edit';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import Dialog from 'material-ui/Dialog';
 import AddEditBucket from './AddEditBucket';
 import Transaction from './Transaction';
 import AddEditTransaction from './AddEditTransaction';
@@ -39,9 +45,12 @@ const paperStyle = {
 class Bucket extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showEditBucket: false };
-
-    this.state = { showAddTransaction: false, transactions: props.b.transactions };
+    this.state={
+      showAddTransaction: false,
+      transactions: props.b.transactions,
+      checkDeleteBucket: false,
+      showEditBucket: false
+    };
     this.showAddTransaction = this.showAddTransaction.bind(this);
     this.addTransaction = this.addTransaction.bind(this);
     this.cancelTransaction = this.cancelTransaction.bind(this);
@@ -51,6 +60,8 @@ class Bucket extends React.Component {
     this.showEditBucket = this.showEditBucket.bind(this);
     this.onEditBucket = this.onEditBucket.bind(this);
     this.onCancelEditBucket = this.onCancelEditBucket.bind(this);
+    this.deleteBucketAborted = this.deleteBucketAborted.bind(this);
+    this.deleteBucketConfirmed = this.deleteBucketConfirmed.bind(this);
   }
   showEditBucket() {
     this.setState({ showEditBucket: true });
@@ -94,8 +105,17 @@ class Bucket extends React.Component {
     this.setState({ showAddTransaction: false });
   }
 
-  onDelete() {
-    this.props.deleteBucket(this.props.b._id);
+  onDelete (){
+      this.setState({ checkDeleteBucket: true });
+  }
+
+  deleteBucketConfirmed () {
+      this.props.deleteBucket(this.props.b._id);
+      this.setState ({ checkDeleteBucket: false });
+  }
+
+  deleteBucketAborted () {
+      this.setState ({ checkDeleteBucket: false });
   }
 
   onDeleteTransaction(id) {
@@ -143,16 +163,36 @@ class Bucket extends React.Component {
   }
 
   render() {
+      const actions = [
+            <FlatButton
+                label="OK"
+                primary={true}
+                onTouchTap={this.deleteBucketConfirmed}
+            />,
+            <FlatButton
+                label="Cancel"
+                primary={true}
+                onTouchTap={this.deleteBucketAborted}
+            />,
+            ];
     return (<div>
-      <Paper style={paperStyle} zDepth={5}>
+      <Paper style={paperStyle} zDepth={3}>
         <AppBar
           showMenuIconButton={false}
           title={<span style={styles.title}>{this.props.b.friendlyName}</span>}
           iconElementRight={<span>
-            <FlatButton label="Edit Bucket" onClick={this.showEditBucket} />
-            <FlatButton label="Delete Bucket" onClick={this.onDelete} />
+            <IconButton tooltip="Edit" onClick={this.showEditBucket} ><EditorModeEdit/></IconButton>
+            <IconButton tooltip="Delete" onClick={this.onDelete} ><ActionDelete /></IconButton>
           </span>}
         />
+        <Dialog
+          title="Delete Bucket"
+          actions={actions}
+          modal={true}
+          open={this.state.checkDeleteBucket}
+          >
+          Are you sure?
+        </Dialog>
         {this.state.showEditBucket ?
           <AddEditBucket
             onAddEditBucket={this.onEditBucket}
@@ -174,14 +214,16 @@ class Bucket extends React.Component {
                   , this)
               }
             </div>
-            <RaisedButton label="Add Transaction" style={buttonStyle} onClick={this.showAddTransaction} />
-            {this.state.showAddTransaction ?
-              <AddEditTransaction
-                onAddEditTransaction={this.addTransaction}
-                onCancelTransaction={this.cancelTransaction}
-              />
-              : null
-            }
+            <div style={paperStyle}>
+              <FloatingActionButton mini={true} secondary={true} onClick={this.showAddTransaction}><ContentAdd/></FloatingActionButton>
+              {this.state.showAddTransaction ?
+                <AddEditTransaction
+                  onAddEditTransaction={this.addTransaction}
+                  onCancelTransaction={this.cancelTransaction}
+                />
+                : null
+              }
+            </div>
           </div>
         }
       </Paper>

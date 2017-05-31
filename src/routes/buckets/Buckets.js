@@ -67,7 +67,6 @@ class Buckets extends React.Component {
           }
           return res.json();
         }).then((json) => {
-          console.log(JSON.stringify(json));
           local.setState({
             buckets: json,
           });
@@ -99,7 +98,6 @@ class Buckets extends React.Component {
           }
           return res.json();
         }).then((json) => {
-          console.log(JSON.stringify(json));
           local.setState({
             buckets: json,
           });
@@ -136,7 +134,6 @@ class Buckets extends React.Component {
           }
           return res.json();
         }).then((json) => {
-          console.log(JSON.stringify(json));
           local.setState({
             buckets: json,
           });
@@ -150,30 +147,25 @@ class Buckets extends React.Component {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme()}>
         <div >
-          <Paper style={paperStyle} zDepth={4}>
-            <div className={s.container}>
-              <h1>Jessica</h1>
-            </div>
-            { this.state.buckets.map(bucket =>
-              (<div key={bucket._id}>
-                <Bucket
-                  b={bucket}
-                  deleteBucket={this.onDeleteBucket}
-                  onEditBucket={this.onEditBucket}
-                />
-              </div>)
-            , this)}
-            <div style={paperStyle}>
-              <FloatingActionButton secondary={true} onClick={this.showAddBucket}>
-                <ContentAdd />
-              </FloatingActionButton>
-              { this.state.showAddBucket ?
-                <AddEditBucket
-                  onAddEditBucket={this.onAddBucket}
-                  onCancelBucket={this.onCancelBucket}
-                /> : null }
-            </div>
-          </Paper>
+          { this.state.buckets.map(bucket =>
+            (<div key={bucket._id}>
+              <Bucket
+                b={bucket}
+                deleteBucket={this.onDeleteBucket}
+                onEditBucket={this.onEditBucket}
+              />
+            </div>)
+          , this)}
+          <div style={paperStyle}>
+            <FloatingActionButton secondary={true} onClick={this.showAddBucket}>
+              <ContentAdd />
+            </FloatingActionButton>
+            { this.state.showAddBucket ?
+              <AddEditBucket
+                onAddEditBucket={this.onAddBucket}
+                onCancelBucket={this.onCancelBucket}
+              /> : null }
+          </div>
         </div>
       </MuiThemeProvider>
     );
