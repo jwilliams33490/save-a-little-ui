@@ -189,4 +189,14 @@ class Bucket extends React.Component {
   }
 }
 
+Bucket.propTypes = {
+  b: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    friendlyName: PropTypes.string.isRequired,
+    transactions: PropTypes.array.isRequired,
+  }).isRequired,
+  onEditBucket: PropTypes.func.isRequired,
+  deleteBucket: PropTypes.func.isRequired,
+};
+
 export default withStyles(Bucket, s);
