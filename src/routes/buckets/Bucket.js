@@ -175,7 +175,8 @@ class Bucket extends React.Component {
       <Paper style={paperStyle} zDepth={3}>
         <AppBar
           showMenuIconButton={false}
-          title={<span style={divStyle}>{this.props.b.friendlyName}</span>}
+          style={divStyle}
+          title={<span>{this.props.b.friendlyName}</span>}
           iconElementRight={<span>
             <IconButton tooltip="Edit" onClick={this.showEditBucket} ><EditorModeEdit /></IconButton>
             <IconButton tooltip="Delete" onClick={this.onDelete} ><ActionDelete /></IconButton>

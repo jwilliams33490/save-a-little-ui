@@ -59,7 +59,6 @@ class AddEditBucket extends React.Component {
   render() {
     let divStyle= {background: this.state.color};
     return (<div>
-      <div style={divStyle}>&nbsp; </div>
       <TextField
         value={this.state.name}
         onChange={this.handleNameChange}
@@ -72,6 +71,7 @@ class AddEditBucket extends React.Component {
         hintText="Blue"
         floatingLabelText="Color"
         onClick={this.onColorClicked}
+        inputStyle={divStyle}
       /><br />
       { this.state.showColorPicker ?
       <TwitterPicker  onChangeComplete={ this.handleColorChangeComplete } color={ this.state.color } />
