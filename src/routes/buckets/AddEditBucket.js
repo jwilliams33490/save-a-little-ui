@@ -3,6 +3,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { TwitterPicker } from 'react-color';
+import ActionDone from 'material-ui/svg-icons/action/done';
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import s from './Buckets.scss';
 
@@ -82,8 +85,10 @@ class AddEditBucket extends React.Component {
         hintText="Type = Liquor"
         floatingLabelText="Filter"
       /><br />
-      <RaisedButton label="OK" style={buttonStyle} onClick={this.okClick} />
-      <RaisedButton label="Cancel" style={buttonStyle} onClick={this.cancelClick} />
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <FloatingActionButton style={buttonStyle} onClick={this.okClick} > <ActionDone /> </FloatingActionButton>
+        <FloatingActionButton style={buttonStyle} onClick={this.cancelClick} > <ContentClear /> </FloatingActionButton>
+      </div>
     </div>);
   }
 }

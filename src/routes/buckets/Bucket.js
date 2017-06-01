@@ -211,23 +211,23 @@ class Bucket extends React.Component {
                   , this)
               }
             </div>
-            <div style={{margin:'20'}}>
+            <div style={{ margin:'20px' }}>
               {this.state.showAddTransaction ?
                 <AddEditTransaction
                   onAddEditTransaction={this.addTransaction}
                   onCancelTransaction={this.cancelTransaction}
                 />
-                : null
+                :
+                <div  style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <FloatingActionButton
+                    mini={true}
+                    secondary={true}
+                    onClick={this.showAddTransaction}
+                  >
+                    <ContentAdd />
+                  </FloatingActionButton>
+                </div>
               }
-              <div  style={{display: 'flex', justifyContent: 'flex-end'}}>
-                <FloatingActionButton
-                  mini={true}
-                  secondary={true}
-                  onClick={this.showAddTransaction}
-                >
-                  <ContentAdd />
-                </FloatingActionButton>
-              </div>
             </div>
           </div>
         }

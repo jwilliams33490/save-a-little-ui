@@ -3,6 +3,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import ActionDone from 'material-ui/svg-icons/action/done';
+import ContentClear from 'material-ui/svg-icons/content/clear';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import s from './Buckets.scss';
 
@@ -80,8 +83,10 @@ class AddEditTransaction extends React.Component {
         hintText="Date of transaction"
         name="date"
       /><br />
-      <RaisedButton label="OK" style={buttonStyle} onClick={this.okClick} />
-      <RaisedButton label="Cancel" style={buttonStyle} onClick={this.cancelClick} />
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <FloatingActionButton mini={true} style={buttonStyle} onClick={this.okClick} > <ActionDone /> </FloatingActionButton>
+        <FloatingActionButton mini={true} style={buttonStyle} onClick={this.cancelClick} > <ContentClear /> </FloatingActionButton>
+      </div>
     </div>);
   }
 }

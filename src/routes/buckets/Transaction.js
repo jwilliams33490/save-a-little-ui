@@ -9,6 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import Moment from 'moment';
 import AddEditTransaction from './AddEditTransaction';
 
+
 import s from './Buckets.scss';
 
 const buttonStyle = {
@@ -27,8 +28,7 @@ const paperStyle = {
 class Transaction extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { editTransaction: false };
-    this.state = { checkDeleteTransaction: false };
+    this.state = { editTransaction: false, checkDeleteTransaction: false};
     this.deleteTransaction = this.deleteTransaction.bind(this);
     this.showEditTransaction = this.showEditTransaction.bind(this);
     this.deleteTransactionConfirmed = this.deleteTransactionConfirmed.bind(this);
@@ -86,21 +86,23 @@ class Transaction extends React.Component {
           >
             Are you sure?
           </Dialog>
-          {this.state.editTransaction ?
-            <AddEditTransaction
-              onAddEditTransaction={this.editTransaction}
-              onCancelTransaction={this.cancelEditTransaction}
-              t={this.props.t}
-            />
-            :
-            <div>
-              <div>Label: {this.props.t.label}</div>
-              <div>Vendor: {this.props.t.vendor}</div>
-              <div>Type: {this.props.t.transactionType}</div>
-              <div>Amount: {this.props.t.amount}</div>
-              <div>Date: {Moment(this.props.t.date).format('MMM Do, YYYY')}</div>
-            </div>
-          }
+          <div style={{margin:'20px'}}>
+            {this.state.editTransaction ?
+              <AddEditTransaction
+                onAddEditTransaction={this.editTransaction}
+                onCancelTransaction={this.cancelEditTransaction}
+                t={this.props.t}
+              />
+              :
+              <div>
+                <div>Label: {this.props.t.label}</div>
+                <div>Vendor: {this.props.t.vendor}</div>
+                <div>Type: {this.props.t.transactionType}</div>
+                <div>Amount: {this.props.t.amount}</div>
+                <div>Date: {Moment(this.props.t.date).format('MMM Do, YYYY')}</div>
+              </div>
+            }
+          </div>
         </Paper>
       </div>);
   }
