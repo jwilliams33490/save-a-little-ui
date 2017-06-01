@@ -24,12 +24,12 @@ function Header() {
       <div className={s.container}>
         <Navigation className={s.nav} />
         <Link className={s.brand} to="/">
-        <EditorAttachMoney  width="38" height="38" color={muiTheme.palette.accent1Color} /> 
+        <EditorAttachMoney style={{width:"30px", height:"30px", marginTop:"-6px"}} color={muiTheme.palette.accent1Color} />
           <span className={s.brandTxt}>Williams Enterprises</span>
         </Link>
         <div className={s.banner}>
-          <h1 className={s.bannerTitle}>React</h1>
-          <p className={s.bannerDesc}>Complex web apps made easy</p>
+          <h1 className={s.bannerTitle}>Save A Little</h1>
+          <p className={s.bannerDesc}>money and mobile mindfulness</p>
         </div>
       </div>
     </div>

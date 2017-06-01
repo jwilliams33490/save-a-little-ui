@@ -155,13 +155,15 @@ class Buckets extends React.Component {
                 />
               </div>)
             , this)}
+            <div style={{margin:'20'}}>
+              { this.state.showAddBucket ?
+                <AddEditBucket
+                  onAddEditBucket={this.onAddBucket}
+                  onCancelBucket={this.onCancelBucket}
+                /> : null }
+            </div>
           </div>
           <div style={{margin:'20'}}>
-            { this.state.showAddBucket ?
-              <AddEditBucket
-                onAddEditBucket={this.onAddBucket}
-                onCancelBucket={this.onCancelBucket}
-              /> : null }
             <div style={{display: 'flex', justifyContent: 'flex-end'}}>
               <FloatingActionButton secondary={true} onClick={this.showAddBucket}>
                 <ContentAdd />
