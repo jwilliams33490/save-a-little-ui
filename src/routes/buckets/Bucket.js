@@ -45,6 +45,7 @@ class Bucket extends React.Component {
       transactions: props.b.transactions,
       checkDeleteBucket: false,
       showEditBucket: false,
+      totalAmount: props.b.totalAmount, // TODO: this is a hack. should be dynamically refreshed from source in Buckets.js
     };
     this.showAddTransaction = this.showAddTransaction.bind(this);
     this.addTransaction = this.addTransaction.bind(this);
@@ -89,6 +90,9 @@ class Bucket extends React.Component {
           local.setState({
             transactions: json,
           });
+          local.setState(prevState => ({
+            totalAmount: Math.round((prevState.totalAmount + Number(data.amount)) * 100) / 100 // TODO: this is a hack
+          }));
         });
     }).catch((err) => {
       console.log(err);
@@ -113,7 +117,7 @@ class Bucket extends React.Component {
     this.setState({ checkDeleteBucket: false });
   }
 
-  onDeleteTransaction(id) {
+  onDeleteTransaction(id, amount) {
     const local = this;
     fetch(`http://localhost:3030/transaction/${this.props.b._id}/tid/${id}`, { method: 'DELETE' })
     .then(() => {
@@ -127,13 +131,16 @@ class Bucket extends React.Component {
           local.setState({
             transactions: json,
           });
+          local.setState((prevState) => ({
+            totalAmount: Math.round((prevState.totalAmount - Number(amount)) * 100) / 100 // TODO: this is a hack
+          }));
         });
     }).catch((err) => {
       console.log(err);
     });
   }
 
-  onEditTransaction(data, id) {
+  onEditTransaction(data, id, oldAmount) {
     const local = this;
     fetch(`http://localhost:3030/transaction/${this.props.b._id}/tid/${id}`, {
       method: 'PUT',
@@ -151,6 +158,9 @@ class Bucket extends React.Component {
           local.setState({
             transactions: json,
           });
+          local.setState((prevState) => ({
+            totalAmount: Math.round((prevState.totalAmount + Number(data.amount) - Number(oldAmount)) * 100) / 100 // TODO: this is a hack
+          }));
         });
     }).catch((err) => {
       console.log(err);
@@ -176,7 +186,7 @@ class Bucket extends React.Component {
         <AppBar
           showMenuIconButton={false}
           style={divStyle}
-          title={<span>{this.props.b.friendlyName}</span>}
+          title={<span>{this.state.totalAmount}&nbsp;-&nbsp;{this.props.b.friendlyName}</span>}
           iconElementRight={<span>
             <IconButton tooltip="Edit" onClick={this.showEditBucket} ><EditorModeEdit /></IconButton>
             <IconButton tooltip="Delete" onClick={this.onDelete} ><ActionDelete /></IconButton>
@@ -240,6 +250,7 @@ Bucket.propTypes = {
   b: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     friendlyName: PropTypes.string.isRequired,
+    totalAmount: PropTypes.number.isRequired,
     transactions: PropTypes.array.isRequired,
   }).isRequired,
   onEditBucket: PropTypes.func.isRequired,

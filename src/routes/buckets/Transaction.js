@@ -43,7 +43,7 @@ class Transaction extends React.Component {
     this.setState({ editTransaction: true });
   }
   editTransaction(data) {
-    this.props.onAddEditTransaction(data, this.props.t._id);
+    this.props.onAddEditTransaction(data, this.props.t._id, this.props.t.amount);
     this.setState({ editTransaction: false });
   }
   cancelEditTransaction() {
@@ -51,7 +51,7 @@ class Transaction extends React.Component {
   }
 
   deleteTransactionConfirmed() {
-    this.props.onDelete(this.props.t._id);
+    this.props.onDelete(this.props.t._id, this.props.t.amount); // TODO: don't need this.props.t.amount - hack
     this.setState({ checkDeleteTransaction: false });
   }
 
